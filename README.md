@@ -6,6 +6,14 @@
 
 [![PHP Version](https://img.shields.io/badge/PHP-8.1+-777BB4?style=flat&logo=php&logoColor=white)](composer.json)
 [![Symfony](https://img.shields.io/badge/Symfony-6.4+-343434?style=flat&logo=symfony&logoColor=white)](composer.json)
+<br/>
+[![Tests](https://github.com/neuralglitch/font-manager/actions/workflows/tests.yml/badge.svg?style=flat&logo=github)](https://github.com/neuralglitch/font-manager/actions/workflows/tests.yml)
+[![Code Coverage](https://img.shields.io/badge/PHPUnit-93.75%25-32c252?style=flat&logo=codecov&logoColor=white)](build/coverage/index.html)
+[![Static Analysis](https://github.com/neuralglitch/font-manager/actions/workflows/static-analysis.yml/badge.svg?style=flat&logo=github)](https://github.com/neuralglitch/font-manager/actions/workflows/static-analysis.yml)
+[![PHPStan Level](https://img.shields.io/badge/PHPStan-level%20max-32c252?style=flat&logo=php&logoColor=white)](phpstan.neon.dist)
+<br/>
+[![Release](https://img.shields.io/packagist/v/neuralglitch/font-manager.svg?style=flat&logo=packagist&logoColor=white)](https://packagist.org/packages/neuralglitch/font-manager)
+[![Downloads](https://img.shields.io/packagist/dt/neuralglitch/font-manager.svg?style=flat&logo=packagist&logoColor=white)](https://packagist.org/packages/neuralglitch/font-manager)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
 </div>
@@ -31,6 +39,11 @@
 | **Local Fonts** | Custom | ✅ Perfect | No | ❌ |
 
 **Recommended for privacy:** Use **Bunny Fonts** (GDPR-compliant, zero tracking)
+
+## Prerequisites
+
+For fully automatic setup, visit the [related Flex recipe repository](https://github.com/neuralglitch/symfony-recipes) and follow the instructions to add it to the
+composer.json in the consuming project, as the recipe is not yet part of the Symfony’s main recipe repository.
 
 ## Installation
 
