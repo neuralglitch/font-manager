@@ -1,0 +1,33 @@
+font_manager:
+    # Default provider: google, bunny, or local
+    default_provider: google
+
+    # Cache TTL for API responses (seconds)
+    cache_ttl: 3600
+
+    # Use locked fonts instead of CDN (automatically enabled in prod)
+    use_locked_fonts: false
+
+    # Directory for locked fonts
+    fonts_dir: '%kernel.project_dir%/assets/fonts'
+
+    # Font lock manifest file
+    manifest_file: '%kernel.project_dir%/var/font-manager.lock.json'
+
+    # Provider configurations
+    providers:
+        google:
+            enabled: true
+            api_key: null  # Optional, only for search command
+
+        bunny:
+            enabled: true  # Privacy-friendly, GDPR compliant
+
+        fontsource:
+            enabled: true  # Self-hosted via CDN (jsdelivr), version-controlled
+
+        local:
+            enabled: false
+            directory: '%kernel.project_dir%/assets/fonts/custom'
+            fonts: {}
+

@@ -1,0 +1,94 @@
+{
+  "name": "neuralglitch/font-manager",
+  "description": "Universal font manager for Symfony supporting multiple providers (Google Fonts, Bunny Fonts, Local Fonts, Fontsource) with development CDN and production font locking",
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "keywords": [
+    "symfony",
+    "symfony-bundle",
+    "fonts",
+    "google-fonts",
+    "bunny-fonts",
+    "local-fonts",
+    "fontsource",
+    "font-manager",
+    "typography",
+    "twig",
+    "asset-mapper",
+    "privacy",
+    "gdpr"
+  ],
+  "homepage": "https://github.com/neuralglitch/font-manager",
+  "authors": [
+    {
+      "name": "neuralglit.ch",
+      "email": "dev@neuralglit.ch"
+    }
+  ],
+  "require": {
+    "php": ">=8.1",
+    "symfony/config": "^6.4 || ^7.0 || ^8.0",
+    "symfony/console": "^6.4 || ^7.0 || ^8.0",
+    "symfony/dependency-injection": "^6.4 || ^7.0 || ^8.0",
+    "symfony/filesystem": "^6.4 || ^7.0 || ^8.0",
+    "symfony/finder": "^6.4 || ^7.0 || ^8.0",
+    "symfony/http-client": "^6.4 || ^7.0 || ^8.0",
+    "symfony/http-kernel": "^6.4 || ^7.0 || ^8.0",
+    "symfony/routing": "^6.4 || ^7.0 || ^8.0",
+    "symfony/twig-bundle": "^6.4 || ^7.0 || ^8.0",
+    "twig/twig": "^3.0"
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^1.11",
+    "phpunit/phpunit": "^10.5 || ^11.0",
+    "friendsofphp/php-cs-fixer": "^3.64",
+    "symfony/yaml": "^6.4 || ^7.0 || ^8.0",
+    "symfony/asset-mapper": "^6.4 || ^7.0 || ^8.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "NeuralGlitch\\FontManager\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "NeuralGlitch\\FontManager\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "symfony/flex": false
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit",
+    "test:coverage": "vendor/bin/phpunit --coverage-html build/coverage --coverage-clover build/coverage.xml --coverage-text",
+    "phpstan": "vendor/bin/phpstan analyse --memory-limit=512M",
+    "cs-fix": "vendor/bin/php-cs-fixer fix --allow-risky=yes",
+    "cs-check": "vendor/bin/php-cs-fixer fix --dry-run --diff --allow-risky=yes"
+  },
+  "scripts-descriptions": {
+    "test": "Run PHPUnit tests",
+    "test:coverage": "Run PHPUnit tests with code coverage",
+    "phpstan": "Run PHPStan static analysis",
+    "cs-fix": "Fix code style issues",
+    "cs-check": "Check code style without fixing"
+  },
+  "support": {
+    "issues": "https://github.com/neuralglitch/font-manager/issues",
+    "source": "https://github.com/neuralglitch/font-manager",
+    "docs": "https://github.com/neuralglitch/font-manager/blob/main/README.md"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-main": "1.0-dev"
+    },
+    "symfony": {
+      "require": "^6.4 || ^7.0 || ^8.0"
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
+
