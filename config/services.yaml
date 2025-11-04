@@ -1,0 +1,74 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Providers
+    NeuralGlitch\FontManager\Provider\GoogleFontsProvider:
+        arguments:
+            $httpClient: '@http_client'
+            $config: '%font_manager.providers.google%'
+
+    NeuralGlitch\FontManager\Provider\BunnyFontsProvider:
+        arguments:
+            $httpClient: '@http_client'
+            $config: '%font_manager.providers.bunny%'
+
+    NeuralGlitch\FontManager\Provider\FontsourceProvider:
+        arguments:
+            $httpClient: '@http_client'
+            $config: '%font_manager.providers.fontsource%'
+
+    NeuralGlitch\FontManager\Provider\LocalFontsProvider:
+        arguments:
+            $httpClient: '@http_client'
+            $config: '%font_manager.providers.local%'
+
+    # Provider Registry
+    NeuralGlitch\FontManager\Provider\ProviderRegistry:
+        arguments:
+            $defaultProvider: '%font_manager.default_provider%'
+        calls:
+            - registerProvider: ['@NeuralGlitch\FontManager\Provider\GoogleFontsProvider']
+            - registerProvider: ['@NeuralGlitch\FontManager\Provider\BunnyFontsProvider']
+            - registerProvider: ['@NeuralGlitch\FontManager\Provider\FontsourceProvider']
+            - registerProvider: ['@NeuralGlitch\FontManager\Provider\LocalFontsProvider']
+
+    # Services
+    NeuralGlitch\FontManager\Service\FontDownloader:
+        arguments:
+            $fontsDir: '%font_manager.fonts_dir%'
+            $httpClient: '@http_client'
+            $providerRegistry: '@NeuralGlitch\FontManager\Provider\ProviderRegistry'
+            $filesystem: '@filesystem'
+
+    NeuralGlitch\FontManager\Service\FontLockManager:
+        arguments:
+            $fontsDir: '%font_manager.fonts_dir%'
+            $manifestFile: '%font_manager.manifest_file%'
+            $fontDownloader: '@NeuralGlitch\FontManager\Service\FontDownloader'
+            $filesystem: '@filesystem'
+
+    # Twig Extension
+    NeuralGlitch\FontManager\Twig\FontManagerExtension:
+        tags: ['twig.extension']
+
+    NeuralGlitch\FontManager\Twig\FontManagerRuntime:
+        arguments:
+            $providerRegistry: '@NeuralGlitch\FontManager\Provider\ProviderRegistry'
+            $useLockedFonts: '%font_manager.use_locked_fonts%'
+            $manifestFile: '%font_manager.manifest_file%'
+            $filesystem: '@filesystem'
+        tags: ['twig.runtime']
+
+    # Commands
+    NeuralGlitch\FontManager\Command\:
+        resource: '../src/Command/*'
+        tags: ['console.command']
+    
+    # Migration Command (needs explicit projectDir)
+    NeuralGlitch\FontManager\Command\MigrateFromGoogleFontsCommand:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+            $filesystem: '@filesystem'
+
