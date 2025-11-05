@@ -50,14 +50,14 @@ final class FontsLockCommand extends Command
         $templateDirs = is_array($templateDirsArg) ? $templateDirsArg : [];
 
         // Default to common template directories
-        if ($templateDirs === []) {
+        if ([] === $templateDirs) {
             $defaultDirs = [
                 $this->projectDir.'/templates',
                 $this->projectDir.'/views',
             ];
             $templateDirs = array_filter($defaultDirs, 'is_dir');
 
-            if ($templateDirs === []) {
+            if ([] === $templateDirs) {
                 $io->error('No template directories found. Please specify template directories as arguments.');
 
                 return Command::FAILURE;
@@ -79,6 +79,7 @@ final class FontsLockCommand extends Command
 
         $io->section('Found fonts');
         $fontList = [];
+        /** @var array<array-key, mixed> $fonts */
         foreach ($fonts as $name => $config) {
             if (! is_array($config)) {
                 continue;

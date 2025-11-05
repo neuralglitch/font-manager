@@ -79,7 +79,7 @@ final class FontLockManager
                     $fonts[$fontName]['weights'] = array_unique(
                         array_merge($fonts[$fontName]['weights'], $weights)
                     );
-                } elseif (empty($fonts[$fontName]['weights'])) {
+                } elseif ([] === $fonts[$fontName]['weights']) {
                     // Default weight
                     $fonts[$fontName]['weights'] = ['400'];
                 }
@@ -90,7 +90,7 @@ final class FontLockManager
                     $fonts[$fontName]['styles'] = array_unique(
                         array_merge($fonts[$fontName]['styles'], $styles)
                     );
-                } elseif (empty($fonts[$fontName]['styles'])) {
+                } elseif ([] === $fonts[$fontName]['styles']) {
                     // Default style
                     $fonts[$fontName]['styles'] = ['normal'];
                 }
@@ -103,8 +103,8 @@ final class FontLockManager
     /**
      * Lock fonts (download and generate manifest).
      *
-     * @param array<string, array{weights: array<int|string>, styles: array<string>, monospace?: bool, provider?: string}> $fonts
-     * @param callable(int, int, string): void|null                                                                        $progressCallback
+     * @param array<array-key, mixed> $fonts
+     * @param callable(int, int, string): void|null $progressCallback
      *
      * @return array<string, mixed>
      */
@@ -157,7 +157,7 @@ final class FontLockManager
                 $relativeCssPath = 'assets/fonts/'.$sanitizedName.'.css';
 
                 // Use actually downloaded weights, not requested weights
-                $actualWeights = empty($result['downloadedWeights']) ? $weights : $result['downloadedWeights'];
+                $actualWeights = [] === $result['downloadedWeights'] ? $weights : $result['downloadedWeights'];
 
                 $manifest['fonts'][$fontName] = [
                     'weights' => $actualWeights,

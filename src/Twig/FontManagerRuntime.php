@@ -87,7 +87,7 @@ final class FontManagerRuntime implements RuntimeExtensionInterface
         bool $monospace
     ): string {
         $fontVar = '--font-family-'.FontVariantHelper::sanitizeFontName($name);
-        $defaultWeight = $weights === [] ? 400 : (int) reset($weights);
+        $defaultWeight = [] === $weights ? 400 : (int) reset($weights);
         $headingWeight = $this->findWeight($weights, 500, 700);
         $boldWeight = $this->findWeight($weights, 700, 700);
 
@@ -146,7 +146,7 @@ final class FontManagerRuntime implements RuntimeExtensionInterface
      */
     private function hasLockedFonts(string $name): bool
     {
-        if (! $this->manifestFile || ! $this->filesystem->exists($this->manifestFile)) {
+        if (null === $this->manifestFile || '' === $this->manifestFile || ! $this->filesystem->exists($this->manifestFile)) {
             return false;
         }
 

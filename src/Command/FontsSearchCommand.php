@@ -73,7 +73,7 @@ final class FontsSearchCommand extends Command
 
             $results = $provider->searchFonts($query, $limit);
 
-            if ($results === []) {
+            if ([] === $results) {
                 $io->warning(sprintf('No fonts found matching "%s"', $query));
 
                 return Command::SUCCESS;

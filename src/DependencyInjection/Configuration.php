@@ -12,6 +12,7 @@ final class Configuration implements ConfigurationInterface
 {
     /**
      * @psalm-suppress UndefinedInterfaceMethod
+     * @psalm-suppress PossiblyNullReference
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {

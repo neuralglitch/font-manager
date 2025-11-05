@@ -120,7 +120,7 @@ final class FontsourceProvider extends AbstractProvider
             }
         }
 
-        if ($css === '' || $css === '0') {
+        if ('' === $css || '0' === $css) {
             throw new ProviderException(sprintf('Failed to download CSS for font "%s" from Fontsource. Font may not be available or weights may not exist.', $fontName));
         }
 
