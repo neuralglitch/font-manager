@@ -42,7 +42,7 @@ final class LocalFontsProvider extends AbstractProvider
 
     public function searchFonts(string $query, int $maxResults = 20): array
     {
-        /** @var array<string, mixed> $fonts */
+        /** @var array<array-key, mixed> $fonts */
         $fonts = $this->config['fonts'] ?? [];
         $results = [];
 
@@ -110,7 +110,7 @@ final class LocalFontsProvider extends AbstractProvider
     {
         $metadata = $this->getFontMetadata($fontName);
 
-        if (! $metadata) {
+        if (null === $metadata || [] === $metadata) {
             return ['weights' => [400], 'styles' => ['normal']];
         }
 
@@ -196,7 +196,7 @@ final class LocalFontsProvider extends AbstractProvider
      */
     public function validateFonts(): array
     {
-        /** @var array<string, mixed> $fonts */
+        /** @var array<array-key, mixed> $fonts */
         $fonts = $this->config['fonts'] ?? [];
         $directory = $this->config['directory'] ?? '';
         $directoryStr = is_string($directory) ? $directory : '';

@@ -16,6 +16,9 @@ abstract class AbstractProvider implements FontProviderInterface
     private static ?array $cache = null;
     private static int $cacheTtl = 3600; // 1 hour
 
+    /**
+     * @var array<string, bool>
+     */
     protected const FEATURES = [
         'search' => false,
         'metadata' => false,
@@ -53,6 +56,7 @@ abstract class AbstractProvider implements FontProviderInterface
         if (! $this->requiresAuth()) {
             return true;
         }
+
         return $this->isAuthenticated();
     }
 

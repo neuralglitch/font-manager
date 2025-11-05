@@ -40,7 +40,7 @@ final class FontsValidateCommand extends Command
 
             $errors = $provider->validateFonts();
 
-            if ($errors === []) {
+            if ([] === $errors) {
                 $io->success('All local font files found!');
 
                 return Command::SUCCESS;

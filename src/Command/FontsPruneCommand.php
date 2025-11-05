@@ -99,7 +99,7 @@ final class FontsPruneCommand extends Command
             }
         }
 
-        if ($toDelete === []) {
+        if ([] === $toDelete) {
             $io->success('No unused fonts found.');
 
             return Command::SUCCESS;

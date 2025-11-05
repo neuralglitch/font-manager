@@ -184,7 +184,7 @@ final class FontDownloader
         $fontFamily = sprintf("'%s', %s", $fontName, $fallbackFamily);
 
         // Determine weights
-        $defaultWeight = $weights === [] ? 400 : (int) reset($weights);
+        $defaultWeight = [] === $weights ? 400 : (int) reset($weights);
 
         $lines = [
             ':root {',

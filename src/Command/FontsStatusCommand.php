@@ -58,7 +58,7 @@ final class FontsStatusCommand extends Command
         );
 
         $fonts = $manifest['fonts'] ?? [];
-        if (! empty($fonts)) {
+        if ([] !== $fonts) {
             $io->section('Locked Fonts');
 
             $rows = [];
