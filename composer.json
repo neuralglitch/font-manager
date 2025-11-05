@@ -62,7 +62,7 @@
   "config": {
     "sort-packages": true,
     "allow-plugins": {
-      "symfony/flex": false,
+      "symfony/flex": true,
       "infection/extension-installer": true
     }
   },
@@ -123,4 +123,3 @@
   "minimum-stability": "stable",
   "prefer-stable": true
 }
-
