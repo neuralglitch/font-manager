@@ -38,9 +38,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Migration guide
 - **Quality assurance:**
   - 143 tests with 89.44% code coverage
-  - PHPStan level max (zero errors)
-  - PSR-12 coding standards
+  - **PHPStan** level max (zero errors)
+  - **Psalm** level 4 static analysis
+  - **Infection** mutation testing (MSI ≥40%, Covered MSI ≥45%)
+  - **PHPMetrics** code quality metrics
+  - **Rector** automated refactoring checks
+  - **PHP-CS-Fixer** PSR-12 coding standards
+  - **Renovate** automated dependency updates
   - Symfony Flex recipe
+  - GitHub Actions CI/CD (Tests, Coverage, Psalm, Infection, Code Style)
 - **AssetMapper integration** for asset management
 
 ### Features

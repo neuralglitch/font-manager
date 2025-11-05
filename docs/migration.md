@@ -15,11 +15,12 @@ php bin/console fonts:migrate-from-google-fonts
 ```
 
 **What it does:**
-- ✅ Converts `google_fonts.yaml` → `font_manager.yaml`
-- ✅ Updates all templates: `google_fonts()` → `font_manager()`
-- ✅ Migrates manifest: `google-fonts.lock.json` → `font-manager.lock.json`
-- ✅ Creates backups automatically
-- ✅ Shows summary of all changes
+
+✅ Converts `google_fonts.yaml` → `font_manager.yaml`  
+✅ Updates all templates: `google_fonts()` → `font_manager()`  
+✅ Migrates manifest: `google-fonts.lock.json` → `font-manager.lock.json`  
+✅ Creates backups automatically  
+✅ Shows summary of all changes
 
 **Options:**
 ```bash

@@ -19,12 +19,13 @@ font_manager:
 ```
 
 **Features:**
-- ✅ 1,500+ fonts
-- ✅ Search API
-- ✅ Font metadata
-- ✅ Variable fonts
-- ⚠️ Tracks user IPs
-- ⚠️ GDPR concerns
+
+✅ 1,500+ fonts  
+✅ Search API  
+✅ Font metadata  
+✅ Variable fonts  
+⚠️ Tracks user IPs  
+⚠️ GDPR concerns
 
 **Usage:**
 ```twig
@@ -49,13 +50,14 @@ font_manager:
 ```
 
 **Features:**
-- ✅ Same 1,500+ fonts as Google
-- ✅ Zero user tracking
-- ✅ GDPR compliant by default
-- ✅ EU-based CDN
-- ✅ Fast global delivery
-- ❌ No search API
-- ❌ No metadata API
+
+✅ Same 1,500+ fonts as Google  
+✅ Zero user tracking  
+✅ GDPR compliant by default  
+✅ EU-based CDN  
+✅ Fast global delivery  
+❌ No search API  
+❌ No metadata API
 
 **Usage:**
 ```twig
@@ -85,12 +87,13 @@ font_manager:
 ```
 
 **Features:**
-- ✅ Same 1,500+ fonts as Google
-- ✅ Version-controlled (via npm versions)
-- ✅ Self-hosted via jsdelivr CDN
-- ✅ No npm required (CDN-based)
-- ✅ Search API (via npm registry)
-- ✅ Privacy-friendly
+
+✅ Same 1,500+ fonts as Google  
+✅ Version-controlled (via npm versions)  
+✅ Self-hosted via jsdelivr CDN  
+✅ No npm required (CDN-based)  
+✅ Search API (via npm registry)  
+✅ Privacy-friendly
 
 **Usage:**
 ```twig
@@ -144,13 +147,14 @@ assets/fonts/custom/
 ```
 
 **Features:**
-- ✅ Full control over fonts
-- ✅ Perfect privacy
-- ✅ Works offline
-- ✅ Custom/licensed fonts
-- ✅ Version control friendly
-- ⚠️ Manual font management
-- ⚠️ Must manage licenses
+
+✅ Full control over fonts  
+✅ Perfect privacy  
+✅ Works offline  
+✅ Custom/licensed fonts  
+✅ Version control friendly  
+⚠️ Manual font management  
+⚠️ Must manage licenses
 
 **Usage:**
 ```twig

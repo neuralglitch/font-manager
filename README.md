@@ -7,10 +7,13 @@
 [![PHP Version](https://img.shields.io/badge/PHP-8.1+-777BB4?style=flat&logo=php&logoColor=white)](composer.json)
 [![Symfony](https://img.shields.io/badge/Symfony-6.4+-343434?style=flat&logo=symfony&logoColor=white)](composer.json)
 <br/>
-[![Tests](https://github.com/neuralglitch/font-manager/actions/workflows/tests.yml/badge.svg?style=flat&logo=github)](https://github.com/neuralglitch/font-manager/actions/workflows/tests.yml)
-[![Code Coverage](https://img.shields.io/badge/PHPUnit-89.45%25-32c252?style=flat&logo=codecov&logoColor=white)](build/coverage/index.html)
-[![Static Analysis](https://github.com/neuralglitch/font-manager/actions/workflows/static-analysis.yml/badge.svg?style=flat&logo=github)](https://github.com/neuralglitch/font-manager/actions/workflows/static-analysis.yml)
-[![PHPStan Level](https://img.shields.io/badge/PHPStan-level%20max-32c252?style=flat&logo=php&logoColor=white)](phpstan.neon.dist)
+[![PHPUnit](https://github.com/neuralglitch/font-manager/actions/workflows/phpunit.yml/badge.svg)](https://github.com/neuralglitch/font-manager/actions/workflows/phpunit.yml)
+[![Coverage](https://github.com/neuralglitch/font-manager/actions/workflows/coverage.yml/badge.svg)](https://github.com/neuralglitch/font-manager/actions/workflows/coverage.yml)
+[![PHPStan](https://github.com/neuralglitch/font-manager/actions/workflows/phpstan.yml/badge.svg)](https://github.com/neuralglitch/font-manager/actions/workflows/phpstan.yml)
+<br/>
+[![Psalm](https://github.com/neuralglitch/font-manager/actions/workflows/psalm.yml/badge.svg)](https://github.com/neuralglitch/font-manager/actions/workflows/psalm.yml)
+[![Infection](https://github.com/neuralglitch/font-manager/actions/workflows/infection.yml/badge.svg)](https://github.com/neuralglitch/font-manager/actions/workflows/infection.yml)
+[![Code Style](https://github.com/neuralglitch/font-manager/actions/workflows/php-cs-fixer.yml/badge.svg)](https://github.com/neuralglitch/font-manager/actions/workflows/php-cs-fixer.yml)
 <br/>
 [![Release](https://img.shields.io/packagist/v/neuralglitch/font-manager.svg?style=flat&logo=packagist&logoColor=white)](https://packagist.org/packages/neuralglitch/font-manager)
 [![Downloads](https://img.shields.io/packagist/dt/neuralglitch/font-manager.svg?style=flat&logo=packagist&logoColor=white)](https://packagist.org/packages/neuralglitch/font-manager)
@@ -125,6 +128,35 @@ See [Migration Guide](docs/migration.md) for details.
 - PHP 8.1 or higher
 - Symfony 6.4, 7.x, or 8.x
 - Twig 3.0 or higher
+
+## Development
+
+### Quality Assurance Tools
+
+```bash
+# Quick QA check
+make qa          # CS + PHPStan + Psalm + Tests
+
+# Full QA suite
+make qa-full     # QA + Mutation Testing + Metrics
+
+# Individual tools
+make phpstan     # Static analysis (PHPStan level max)
+make psalm       # Static analysis (Psalm level 4)
+make infection   # Mutation testing (MSI ≥40%)
+make metrics     # Code quality metrics
+make rector      # Automated refactoring checks
+```
+
+### Dependency Management
+
+This package uses [Renovate](https://docs.renovatebot.com/) for automated dependency updates:
+- Weekly updates (Mondays before 6am)
+- Security updates at any time
+- Grouped updates for Symfony packages and QA tools
+- Auto-merge for minor GitHub Actions updates
+
+For more details, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Support
 
