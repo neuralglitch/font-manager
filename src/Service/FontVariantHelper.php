@@ -31,11 +31,11 @@ final class FontVariantHelper
                 $variants[] = sprintf('1,%d', $weight); // Italic
             }
 
-            return ['ital,wght@'.implode(';', $variants)];
+            return ['ital,wght@' . implode(';', $variants)];
         }
 
         // Use simple wght format: wght@300;400;500;700
-        return ['wght@'.implode(';', $weightList)];
+        return ['wght@' . implode(';', $weightList)];
     }
 
     /**
@@ -48,7 +48,7 @@ final class FontVariantHelper
     {
         $variants = self::generateVariants($weights, $styles);
 
-        return $fontName.':'.implode(',', $variants);
+        return $fontName . ':' . implode(',', $variants);
     }
 
     /**

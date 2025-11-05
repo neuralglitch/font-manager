@@ -17,7 +17,7 @@ final class LocalFontsProviderExtendedTest extends TestCase
     protected function setUp(): void
     {
         $this->filesystem = new Filesystem();
-        $this->tempDir = sys_get_temp_dir().'/font-manager-test-'.uniqid();
+        $this->tempDir = sys_get_temp_dir() . '/font-manager-test-' . uniqid();
         $this->filesystem->mkdir($this->tempDir);
     }
 
@@ -28,7 +28,7 @@ final class LocalFontsProviderExtendedTest extends TestCase
 
     public function testDownloadFontCssGeneratesValidCss(): void
     {
-        $fontFile = $this->tempDir.'/test-regular.woff2';
+        $fontFile = $this->tempDir . '/test-regular.woff2';
         $this->filesystem->dumpFile($fontFile, 'fake-font-data');
 
         $config = [
@@ -57,7 +57,7 @@ final class LocalFontsProviderExtendedTest extends TestCase
 
     public function testDownloadFontCssWithUnicodeRange(): void
     {
-        $fontFile = $this->tempDir.'/test-regular.woff2';
+        $fontFile = $this->tempDir . '/test-regular.woff2';
         $this->filesystem->dumpFile($fontFile, 'fake-font-data');
 
         $config = [
@@ -84,7 +84,7 @@ final class LocalFontsProviderExtendedTest extends TestCase
 
     public function testDownloadFontCssSkipsUnavailableVariants(): void
     {
-        $fontFile = $this->tempDir.'/test-regular.woff2';
+        $fontFile = $this->tempDir . '/test-regular.woff2';
         $this->filesystem->dumpFile($fontFile, 'fake-font-data');
 
         $config = [
@@ -113,7 +113,7 @@ final class LocalFontsProviderExtendedTest extends TestCase
 
     public function testRenderCdnLinksGeneratesInlineCss(): void
     {
-        $fontFile = $this->tempDir.'/test-regular.woff2';
+        $fontFile = $this->tempDir . '/test-regular.woff2';
         $this->filesystem->dumpFile($fontFile, 'fake-font-data');
 
         $config = [

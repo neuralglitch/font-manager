@@ -32,7 +32,7 @@ final class FontsValidateCommand extends Command
         try {
             $provider = $this->providerRegistry->getProvider('local');
 
-            if (! $provider instanceof LocalFontsProvider) {
+            if (!$provider instanceof LocalFontsProvider) {
                 $io->error('Local fonts provider not found or not configured properly.');
 
                 return Command::FAILURE;

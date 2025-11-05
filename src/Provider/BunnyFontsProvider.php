@@ -41,7 +41,7 @@ final class BunnyFontsProvider extends AbstractProvider
             'provider' => 'bunny',
             'category' => 'Unknown',
             'variants' => ['regular'],
-            'note' => 'Bunny Fonts uses the same catalog as Google Fonts. '.
+            'note' => 'Bunny Fonts uses the same catalog as Google Fonts. ' .
                      'For full metadata, use Google Fonts provider temporarily.',
         ];
     }

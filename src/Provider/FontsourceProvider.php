@@ -31,9 +31,9 @@ final class FontsourceProvider extends AbstractProvider
     public function searchFonts(string $query, int $maxResults = 20): array
     {
         // Search npm registry for @fontsource packages
-        $response = $this->httpClient->request('GET', self::NPM_REGISTRY.'/-/v1/search', [
+        $response = $this->httpClient->request('GET', self::NPM_REGISTRY . '/-/v1/search', [
             'query' => [
-                'text' => '@fontsource/'.$query,
+                'text' => '@fontsource/' . $query,
                 'size' => $maxResults,
             ],
         ]);
@@ -62,10 +62,10 @@ final class FontsourceProvider extends AbstractProvider
 
     public function getFontMetadata(string $fontName): ?array
     {
-        $packageName = '@fontsource/'.$fontName;
+        $packageName = '@fontsource/' . $fontName;
 
         try {
-            $response = $this->httpClient->request('GET', self::NPM_REGISTRY.'/'.$packageName);
+            $response = $this->httpClient->request('GET', self::NPM_REGISTRY . '/' . $packageName);
             $data = $response->toArray();
 
             return [
@@ -98,7 +98,7 @@ final class FontsourceProvider extends AbstractProvider
         FontDisplay $display = FontDisplay::SWAP
     ): string {
         $version = $this->getLatestVersion($fontName);
-        $packageName = '@fontsource/'.$fontName;
+        $packageName = '@fontsource/' . $fontName;
         $css = '';
 
         // Download CSS for each weight (Fontsource has separate CSS per weight)
@@ -113,7 +113,7 @@ final class FontsourceProvider extends AbstractProvider
                 );
 
                 $response = $this->httpClient->request('GET', $url);
-                $css .= $response->getContent()."\n";
+                $css .= $response->getContent() . "\n";
             } catch (\Exception) {
                 // Skip if weight not available
                 continue;
@@ -134,7 +134,7 @@ final class FontsourceProvider extends AbstractProvider
         FontDisplay $display = FontDisplay::SWAP
     ): string {
         $version = $this->getLatestVersion($fontName);
-        $packageName = '@fontsource/'.$fontName;
+        $packageName = '@fontsource/' . $fontName;
         $parts = [];
 
         // Preconnect to jsdelivr
@@ -160,8 +160,8 @@ final class FontsourceProvider extends AbstractProvider
      */
     private function getLatestVersion(string $fontName): string
     {
-        $packageName = '@fontsource/'.$fontName;
-        $cacheKey = 'fontsource_version_'.$fontName;
+        $packageName = '@fontsource/' . $fontName;
+        $cacheKey = 'fontsource_version_' . $fontName;
 
         // Check cache
         $cached = $this->getFromCache($cacheKey);
@@ -170,7 +170,7 @@ final class FontsourceProvider extends AbstractProvider
         }
 
         try {
-            $response = $this->httpClient->request('GET', self::NPM_REGISTRY.'/'.$packageName);
+            $response = $this->httpClient->request('GET', self::NPM_REGISTRY . '/' . $packageName);
             $data = $response->toArray();
             $version = $data['dist-tags']['latest'] ?? 'latest';
 

@@ -35,12 +35,12 @@ final class GoogleFontsProvider extends AbstractProvider
 
     protected function isAuthenticated(): bool
     {
-        return isset($this->config['api_key']) && ! empty($this->config['api_key']);
+        return isset($this->config['api_key']) && !empty($this->config['api_key']);
     }
 
     public function searchFonts(string $query, int $maxResults = 20): array
     {
-        if (! $this->isAuthenticated()) {
+        if (!$this->isAuthenticated()) {
             throw new ConfigurationException('Google Fonts API key is required for search. Get your free API key at https://console.cloud.google.com/apis/credentials and configure it in config/packages/font_manager.yaml under providers.google.api_key');
         }
 
@@ -92,7 +92,7 @@ final class GoogleFontsProvider extends AbstractProvider
 
     public function getFontMetadata(string $fontName): ?array
     {
-        if (! $this->isAuthenticated()) {
+        if (!$this->isAuthenticated()) {
             // Return basic metadata without API call
             return [
                 'family' => $fontName,
@@ -136,7 +136,7 @@ final class GoogleFontsProvider extends AbstractProvider
         $styles = ['normal'];
 
         foreach ($variants as $variant) {
-            if (! is_string($variant)) {
+            if (!is_string($variant)) {
                 continue;
             }
             // Parse variant like "300", "300italic", "regular", "italic", "700", "700italic"
@@ -147,7 +147,7 @@ final class GoogleFontsProvider extends AbstractProvider
                     $weight = 400;
                 }
                 $weights[] = $weight;
-                if (! in_array('italic', $styles, true)) {
+                if (!in_array('italic', $styles, true)) {
                     $styles[] = 'italic';
                 }
             } else {

@@ -17,7 +17,7 @@ final class FontsPruneCommandTest extends TestCase
     protected function setUp(): void
     {
         $this->filesystem = new Filesystem();
-        $this->tempDir = sys_get_temp_dir().'/font-manager-test-'.uniqid();
+        $this->tempDir = sys_get_temp_dir() . '/font-manager-test-' . uniqid();
         $this->filesystem->mkdir($this->tempDir);
     }
 
@@ -28,8 +28,8 @@ final class FontsPruneCommandTest extends TestCase
 
     public function testExecuteWithNoManifest(): void
     {
-        $manifestFile = $this->tempDir.'/manifest.json';
-        $fontsDir = $this->tempDir.'/fonts';
+        $manifestFile = $this->tempDir . '/manifest.json';
+        $fontsDir = $this->tempDir . '/fonts';
 
         $command = new FontsPruneCommand($manifestFile, $fontsDir, $this->filesystem);
         $commandTester = new CommandTester($command);
@@ -42,8 +42,8 @@ final class FontsPruneCommandTest extends TestCase
 
     public function testExecuteWithNoUnusedFonts(): void
     {
-        $manifestFile = $this->tempDir.'/manifest.json';
-        $fontsDir = $this->tempDir.'/fonts';
+        $manifestFile = $this->tempDir . '/manifest.json';
+        $fontsDir = $this->tempDir . '/fonts';
 
         $manifest = [
             'fonts' => [
@@ -56,8 +56,8 @@ final class FontsPruneCommandTest extends TestCase
 
         $this->filesystem->mkdir($fontsDir);
         $this->filesystem->dumpFile($manifestFile, (string) json_encode($manifest));
-        $this->filesystem->dumpFile($fontsDir.'/roboto-400.woff2', 'font');
-        $this->filesystem->dumpFile($fontsDir.'/roboto.css', 'css');
+        $this->filesystem->dumpFile($fontsDir . '/roboto-400.woff2', 'font');
+        $this->filesystem->dumpFile($fontsDir . '/roboto.css', 'css');
 
         $command = new FontsPruneCommand($manifestFile, $fontsDir, $this->filesystem);
         $commandTester = new CommandTester($command);
@@ -70,8 +70,8 @@ final class FontsPruneCommandTest extends TestCase
 
     public function testExecuteDryRun(): void
     {
-        $manifestFile = $this->tempDir.'/manifest.json';
-        $fontsDir = $this->tempDir.'/fonts';
+        $manifestFile = $this->tempDir . '/manifest.json';
+        $fontsDir = $this->tempDir . '/fonts';
 
         $manifest = [
             'fonts' => [
@@ -83,7 +83,7 @@ final class FontsPruneCommandTest extends TestCase
 
         $this->filesystem->mkdir($fontsDir);
         $this->filesystem->dumpFile($manifestFile, (string) json_encode($manifest));
-        $this->filesystem->dumpFile($fontsDir.'/unused-font.woff2', 'font');
+        $this->filesystem->dumpFile($fontsDir . '/unused-font.woff2', 'font');
 
         $command = new FontsPruneCommand($manifestFile, $fontsDir, $this->filesystem);
         $commandTester = new CommandTester($command);
@@ -92,6 +92,6 @@ final class FontsPruneCommandTest extends TestCase
         self::assertSame(0, $commandTester->getStatusCode());
         $output = $commandTester->getDisplay();
         self::assertStringContainsString('Dry run', $output);
-        self::assertTrue($this->filesystem->exists($fontsDir.'/unused-font.woff2'));
+        self::assertTrue($this->filesystem->exists($fontsDir . '/unused-font.woff2'));
     }
 }

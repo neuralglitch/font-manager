@@ -29,7 +29,7 @@ final class FontsStatusCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Fonts Status');
 
-        if (! $this->filesystem->exists($this->manifestFile)) {
+        if (!$this->filesystem->exists($this->manifestFile)) {
             $io->warning('No fonts locked yet. Run fonts:lock to lock fonts for production.');
 
             return Command::SUCCESS;
@@ -43,7 +43,7 @@ final class FontsStatusCommand extends Command
         }
 
         $manifest = json_decode($content, true);
-        if (! is_array($manifest)) {
+        if (!is_array($manifest)) {
             $io->error('Invalid manifest file');
 
             return Command::FAILURE;
@@ -63,7 +63,7 @@ final class FontsStatusCommand extends Command
 
             $rows = [];
             foreach ($fonts as $name => $config) {
-                if (! is_array($config)) {
+                if (!is_array($config)) {
                     continue;
                 }
                 $rows[] = [

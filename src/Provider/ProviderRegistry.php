@@ -37,13 +37,13 @@ final class ProviderRegistry
      */
     public function getProvider(string $name): FontProviderInterface
     {
-        if (! isset($this->providers[$name])) {
+        if (!isset($this->providers[$name])) {
             throw new ProviderException(sprintf('Font provider "%s" not found. Available providers: %s', $name, implode(', ', array_keys($this->providers))));
         }
 
         $provider = $this->providers[$name];
 
-        if (! $provider->isReady()) {
+        if (!$provider->isReady()) {
             throw new ProviderException(sprintf('Font provider "%s" is not ready. Check configuration (API key, etc.)', $name));
         }
 

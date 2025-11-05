@@ -47,10 +47,10 @@ final class LocalFontsProvider extends AbstractProvider
         $results = [];
 
         foreach ($fonts as $fontKey => $fontConfig) {
-            if (! is_string($fontKey)) {
+            if (!is_string($fontKey)) {
                 continue;
             }
-            if (! is_array($fontConfig)) {
+            if (!is_array($fontConfig)) {
                 continue;
             }
             $displayName = $fontConfig['display_name'] ?? $fontKey;
@@ -80,12 +80,12 @@ final class LocalFontsProvider extends AbstractProvider
         /** @var array<string, mixed> $fonts */
         $fonts = $this->config['fonts'] ?? [];
 
-        if (! isset($fonts[$fontName])) {
+        if (!isset($fonts[$fontName])) {
             return null;
         }
 
         $fontConfig = $fonts[$fontName];
-        if (! is_array($fontConfig)) {
+        if (!is_array($fontConfig)) {
             return null;
         }
 
@@ -132,12 +132,12 @@ final class LocalFontsProvider extends AbstractProvider
         /** @var array<string, mixed> $fonts */
         $fonts = $this->config['fonts'] ?? [];
 
-        if (! isset($fonts[$fontName])) {
-            throw new ConfigurationException(sprintf("Local font '%s' not found in configuration. ".'Add it to config/packages/font_manager.yaml under providers.local.fonts', $fontName));
+        if (!isset($fonts[$fontName])) {
+            throw new ConfigurationException(sprintf("Local font '%s' not found in configuration. " . 'Add it to config/packages/font_manager.yaml under providers.local.fonts', $fontName));
         }
 
         $fontConfig = $fonts[$fontName];
-        if (! is_array($fontConfig)) {
+        if (!is_array($fontConfig)) {
             throw new ConfigurationException(sprintf("Invalid configuration for font '%s'", $fontName));
         }
 
@@ -150,20 +150,20 @@ final class LocalFontsProvider extends AbstractProvider
                 $key = "{$weight}-{$style}";
 
                 $files = $fontConfig['files'] ?? [];
-                if (! is_array($files) || ! isset($files[$key])) {
+                if (!is_array($files) || !isset($files[$key])) {
                     continue; // Skip unavailable variants
                 }
 
                 $filename = $files[$key];
-                if (! is_string($filename)) {
+                if (!is_string($filename)) {
                     continue;
                 }
 
-                $filepath = $directoryStr.'/'.$filename;
+                $filepath = $directoryStr . '/' . $filename;
 
                 // Check if file exists
-                if (! $this->filesystem->exists($filepath)) {
-                    throw new ValidationException(sprintf("Font file not found: %s\n".'Make sure the file exists in: %s', $filepath, $directoryStr));
+                if (!$this->filesystem->exists($filepath)) {
+                    throw new ValidationException(sprintf("Font file not found: %s\n" . 'Make sure the file exists in: %s', $filepath, $directoryStr));
                 }
 
                 // Determine format from extension
@@ -203,27 +203,27 @@ final class LocalFontsProvider extends AbstractProvider
         $errors = [];
 
         foreach ($fonts as $fontKey => $fontConfig) {
-            if (! is_string($fontKey)) {
+            if (!is_string($fontKey)) {
                 continue;
             }
-            if (! is_array($fontConfig)) {
+            if (!is_array($fontConfig)) {
                 continue;
             }
             $files = $fontConfig['files'] ?? [];
-            if (! is_array($files)) {
+            if (!is_array($files)) {
                 continue;
             }
 
             foreach ($files as $variant => $filename) {
-                if (! is_string($variant)) {
+                if (!is_string($variant)) {
                     continue;
                 }
-                if (! is_string($filename)) {
+                if (!is_string($filename)) {
                     continue;
                 }
-                $filepath = $directoryStr.'/'.$filename;
+                $filepath = $directoryStr . '/' . $filename;
 
-                if (! $this->filesystem->exists($filepath)) {
+                if (!$this->filesystem->exists($filepath)) {
                     $errors[] = [
                         'font' => $fontKey,
                         'variant' => $variant,
