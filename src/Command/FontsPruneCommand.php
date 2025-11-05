@@ -76,7 +76,7 @@ final class FontsPruneCommand extends Command
             }
             // Also keep CSS files
             if (isset($fontConfig['css'])) {
-                $cssFile = basename($fontConfig['css']);
+                $cssFile = basename((string) $fontConfig['css']);
                 $referencedFiles[$cssFile] = true;
             }
         }
@@ -99,7 +99,7 @@ final class FontsPruneCommand extends Command
             }
         }
 
-        if (empty($toDelete)) {
+        if ($toDelete === []) {
             $io->success('No unused fonts found.');
 
             return Command::SUCCESS;

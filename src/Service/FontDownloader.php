@@ -61,16 +61,17 @@ final class FontDownloader
         }
 
         // Prepare weight and style mappings for file naming
-        $weightsMap = array_map(fn ($w) => (int) $w, $weights);
+        $weightsMap = array_map(fn ($w): int => (int) $w, $weights);
         $hasItalic = in_array('italic', $styles, true);
 
         // Extract font URLs from CSS and download files
         $files = [];
         $downloadedWeights = []; // Track actually downloaded weights
+        $downloadedStyles = []; // Track actually downloaded styles
         $weightIndex = 0;
         $processedCss = preg_replace_callback(
             '/url\(([^)]+)\)/',
-            function (array $matches) use (&$files, &$downloadedWeights, &$weightIndex, $sanitizedName, $weightsMap, $hasItalic, $monospace): string {
+            function (array $matches) use (&$files, &$downloadedWeights, &$downloadedStyles, &$weightIndex, $sanitizedName, $weightsMap, $hasItalic, $monospace): string {
                 $url = trim($matches[1], '\'"');
 
                 // Skip data URLs
@@ -124,9 +125,13 @@ final class FontDownloader
 
                 $files[$filename] = $filePath;
 
-                // Track the actual weight that was downloaded
+                // Track the actual weight and style that were downloaded
                 if (! in_array($weight, $downloadedWeights, true)) {
                     $downloadedWeights[] = $weight;
+                }
+                $style = $isItalic ? 'italic' : 'normal';
+                if (! in_array($style, $downloadedStyles, true)) {
+                    $downloadedStyles[] = $style;
                 }
 
                 ++$weightIndex;
@@ -141,8 +146,8 @@ final class FontDownloader
             throw new FontDownloadException('Failed to process CSS file URLs');
         }
 
-        // Generate intelligent CSS rules
-        $stylesheetCss = $this->generateStylesheetCss($fontName, $weights, $styles, $monospace);
+        // Generate intelligent CSS rules (use actually downloaded styles)
+        $stylesheetCss = $this->generateStylesheetCss($fontName, $weights, $downloadedStyles, $monospace);
 
         // Combine @font-face declarations and intelligent styles
         $combinedCss = $processedCss."\n\n".$stylesheetCss;
@@ -179,7 +184,7 @@ final class FontDownloader
         $fontFamily = sprintf("'%s', %s", $fontName, $fallbackFamily);
 
         // Determine weights
-        $defaultWeight = ! empty($weights) ? (int) reset($weights) : 400;
+        $defaultWeight = $weights === [] ? 400 : (int) reset($weights);
 
         $lines = [
             ':root {',
@@ -233,6 +238,18 @@ final class FontDownloader
                 '',
                 'strong, b {',
                 "  font-weight: {$boldWeight};",
+                '}',
+            ]);
+        }
+
+        // Add italic support if italic style is included
+        $hasItalic = in_array('italic', $styles, true);
+        if ($hasItalic) {
+            $lines = array_merge($lines, [
+                '',
+                'em, i, cite, dfn, var {',
+                "  font-family: var({$fontVar});",
+                '  font-style: italic;',
                 '}',
             ]);
         }

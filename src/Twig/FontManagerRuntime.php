@@ -54,7 +54,7 @@ final class FontManagerRuntime implements RuntimeExtensionInterface
 
         // Check if we should use locked fonts
         if ($this->useLockedFonts && $this->hasLockedFonts($name)) {
-            return $this->renderLockedFonts($name, $monospace);
+            return $this->renderLockedFonts($name);
         }
 
         // Get the provider (use default if not specified)
@@ -87,7 +87,7 @@ final class FontManagerRuntime implements RuntimeExtensionInterface
         bool $monospace
     ): string {
         $fontVar = '--font-family-'.FontVariantHelper::sanitizeFontName($name);
-        $defaultWeight = ! empty($weights) ? (int) reset($weights) : 400;
+        $defaultWeight = $weights === [] ? 400 : (int) reset($weights);
         $headingWeight = $this->findWeight($weights, 500, 700);
         $boldWeight = $this->findWeight($weights, 700, 700);
 
@@ -106,7 +106,7 @@ final class FontManagerRuntime implements RuntimeExtensionInterface
     /**
      * Render locked fonts (production mode).
      */
-    private function renderLockedFonts(string $name, bool $monospace): string
+    private function renderLockedFonts(string $name): string
     {
         $sanitizedName = FontVariantHelper::sanitizeFontName($name);
         $cssPath = '/assets/fonts/'.$sanitizedName.'.css';

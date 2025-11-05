@@ -22,7 +22,7 @@ final class LocalFontsProvider extends AbstractProvider
         'cdn' => false,
     ];
 
-    private Filesystem $filesystem;
+    private readonly Filesystem $filesystem;
 
     /**
      * @param array<string, mixed> $config
@@ -47,10 +47,12 @@ final class LocalFontsProvider extends AbstractProvider
         $results = [];
 
         foreach ($fonts as $fontKey => $fontConfig) {
-            if (! is_string($fontKey) || ! is_array($fontConfig)) {
+            if (! is_string($fontKey)) {
                 continue;
             }
-
+            if (! is_array($fontConfig)) {
+                continue;
+            }
             $displayName = $fontConfig['display_name'] ?? $fontKey;
             $displayNameStr = is_string($displayName) ? $displayName : $fontKey;
 
@@ -201,20 +203,24 @@ final class LocalFontsProvider extends AbstractProvider
         $errors = [];
 
         foreach ($fonts as $fontKey => $fontConfig) {
-            if (! is_string($fontKey) || ! is_array($fontConfig)) {
+            if (! is_string($fontKey)) {
                 continue;
             }
-
+            if (! is_array($fontConfig)) {
+                continue;
+            }
             $files = $fontConfig['files'] ?? [];
             if (! is_array($files)) {
                 continue;
             }
 
             foreach ($files as $variant => $filename) {
-                if (! is_string($variant) || ! is_string($filename)) {
+                if (! is_string($variant)) {
                     continue;
                 }
-
+                if (! is_string($filename)) {
+                    continue;
+                }
                 $filepath = $directoryStr.'/'.$filename;
 
                 if (! $this->filesystem->exists($filepath)) {

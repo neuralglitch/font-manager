@@ -13,8 +13,6 @@ use Symfony\Component\Finder\Finder;
 final class FontLockManager
 {
     public function __construct(
-        /** @phpstan-ignore-next-line - Property is used indirectly via FontDownloader */
-        private readonly string $fontsDir,
         private readonly string $manifestFile,
         private readonly FontDownloader $fontDownloader,
         private readonly Filesystem $filesystem
@@ -53,14 +51,16 @@ final class FontLockManager
             // Pattern: font_manager('Font Name', 'weights', 'styles', 'display', monospace, 'provider')
             preg_match_all(
                 '/font_manager\s*\(\s*([^)]+)\)/',
-                $content,
+                (string) $content,
                 $matches
             );
 
             foreach ($matches[1] as $args) {
                 $fontData = $this->parseFunctionArgs($args);
-
-                if (! isset($fontData['name']) || ! is_string($fontData['name'])) {
+                if (! isset($fontData['name'])) {
+                    continue;
+                }
+                if (! is_string($fontData['name'])) {
                     continue;
                 }
 
@@ -79,11 +79,9 @@ final class FontLockManager
                     $fonts[$fontName]['weights'] = array_unique(
                         array_merge($fonts[$fontName]['weights'], $weights)
                     );
-                } else {
+                } elseif (empty($fonts[$fontName]['weights'])) {
                     // Default weight
-                    if (empty($fonts[$fontName]['weights'])) {
-                        $fonts[$fontName]['weights'] = ['400'];
-                    }
+                    $fonts[$fontName]['weights'] = ['400'];
                 }
 
                 // Merge styles
@@ -92,11 +90,9 @@ final class FontLockManager
                     $fonts[$fontName]['styles'] = array_unique(
                         array_merge($fonts[$fontName]['styles'], $styles)
                     );
-                } else {
+                } elseif (empty($fonts[$fontName]['styles'])) {
                     // Default style
-                    if (empty($fonts[$fontName]['styles'])) {
-                        $fonts[$fontName]['styles'] = ['normal'];
-                    }
+                    $fonts[$fontName]['styles'] = ['normal'];
                 }
             }
         }
@@ -161,7 +157,7 @@ final class FontLockManager
                 $relativeCssPath = 'assets/fonts/'.$sanitizedName.'.css';
 
                 // Use actually downloaded weights, not requested weights
-                $actualWeights = ! empty($result['downloadedWeights']) ? $result['downloadedWeights'] : $weights;
+                $actualWeights = empty($result['downloadedWeights']) ? $weights : $result['downloadedWeights'];
 
                 $manifest['fonts'][$fontName] = [
                     'weights' => $actualWeights,

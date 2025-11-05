@@ -40,7 +40,6 @@ final class FontsLockCommandTest extends TestCase
 
         $downloader = new FontDownloader($this->tempDir.'/fonts', $httpClient, $registry, $this->filesystem);
         $lockManager = new FontLockManager(
-            $this->tempDir.'/fonts',
             $this->tempDir.'/manifest.json',
             $downloader,
             $this->filesystem
@@ -71,7 +70,6 @@ final class FontsLockCommandTest extends TestCase
 
         $downloader = new FontDownloader($this->tempDir.'/fonts', $httpClient, $registry, $this->filesystem);
         $lockManager = new FontLockManager(
-            $this->tempDir.'/fonts',
             $this->tempDir.'/manifest.json',
             $downloader,
             $this->filesystem

@@ -50,14 +50,14 @@ final class FontsLockCommand extends Command
         $templateDirs = is_array($templateDirsArg) ? $templateDirsArg : [];
 
         // Default to common template directories
-        if (empty($templateDirs)) {
+        if ($templateDirs === []) {
             $defaultDirs = [
                 $this->projectDir.'/templates',
                 $this->projectDir.'/views',
             ];
             $templateDirs = array_filter($defaultDirs, 'is_dir');
 
-            if (empty($templateDirs)) {
+            if ($templateDirs === []) {
                 $io->error('No template directories found. Please specify template directories as arguments.');
 
                 return Command::FAILURE;
@@ -71,7 +71,7 @@ final class FontsLockCommand extends Command
 
         $fonts = $this->lockManager->scanTemplates($templateDirs);
 
-        if (! is_array($fonts) || empty($fonts)) {
+        if ([] === $fonts) {
             $io->warning('No font_manager() function calls found in templates.');
 
             return Command::SUCCESS;
@@ -93,7 +93,7 @@ final class FontsLockCommand extends Command
         $io->section('Downloading fonts');
         $io->progressStart(count($fonts));
 
-        $manifest = $this->lockManager->lockFonts($fonts, function (int $current, int $total, string $name) use ($io): void {
+        $this->lockManager->lockFonts($fonts, function (int $current, int $total, string $name) use ($io): void {
             $io->progressAdvance();
         });
 

@@ -46,8 +46,8 @@ final class FontsourceProvider extends AbstractProvider
             $name = $package['name'] ?? '';
 
             // Extract font name from @fontsource/font-name
-            if (str_starts_with($name, '@fontsource/')) {
-                $fontName = substr($name, 12); // Remove '@fontsource/' prefix
+            if (str_starts_with((string) $name, '@fontsource/')) {
+                $fontName = substr((string) $name, 12); // Remove '@fontsource/' prefix
 
                 $results[] = [
                     'family' => $fontName,
@@ -77,7 +77,7 @@ final class FontsourceProvider extends AbstractProvider
                 'description' => $data['description'] ?? '',
                 'license' => $data['license'] ?? 'unknown',
             ];
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return null;
         }
     }
@@ -114,13 +114,13 @@ final class FontsourceProvider extends AbstractProvider
 
                 $response = $this->httpClient->request('GET', $url);
                 $css .= $response->getContent()."\n";
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 // Skip if weight not available
                 continue;
             }
         }
 
-        if (empty($css)) {
+        if ($css === '' || $css === '0') {
             throw new ProviderException(sprintf('Failed to download CSS for font "%s" from Fontsource. Font may not be available or weights may not exist.', $fontName));
         }
 
@@ -178,7 +178,7 @@ final class FontsourceProvider extends AbstractProvider
             $this->putInCache($cacheKey, $version);
 
             return $version;
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // Fallback to 'latest' if can't fetch version
             return 'latest';
         }
