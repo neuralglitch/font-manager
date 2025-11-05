@@ -16,11 +16,15 @@
     </projectFiles>
 
     <issueHandlers>
-        <UnusedClass>
+        <!-- Suppress MissingOverrideAttribute for now (PHP 8.3+ feature) -->
+        <MissingOverrideAttribute errorLevel="suppress" />
+        
+        <!-- Suppress Symfony fluent interface issues -->
+        <UndefinedInterfaceMethod>
             <errorLevel type="suppress">
-                <file name="src/FontManagerBundle.php"/>
+                <file name="src/DependencyInjection/Configuration.php"/>
             </errorLevel>
-        </UnusedClass>
+        </UndefinedInterfaceMethod>
     </issueHandlers>
 </psalm>
 
