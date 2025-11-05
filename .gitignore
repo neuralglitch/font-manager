@@ -27,6 +27,12 @@ composer.lock
 build/
 .gitconfig
 
+# QA Tools
+/psalm-baseline.xml
+/.psalm-cache/
+/.infection-cache/
+/.rector-cache/
+
 # Local configuration overrides
 /phpunit.xml
 /phpstan.neon
