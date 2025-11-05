@@ -33,9 +33,9 @@ final class FontsSearchCommand extends Command
             ->addOption('provider', 'p', InputOption::VALUE_REQUIRED, 'Provider to use (google, bunny, local)', null)
             ->addOption('limit', 'l', InputOption::VALUE_REQUIRED, 'Maximum results', '20')
             ->setHelp(
-                'The <info>%command.name%</info> command searches for fonts by name.'."\n\n".
-                'Example: <info>php %command.full_name% roboto</info>'."\n".
-                'Example: <info>php %command.full_name% open --limit=10</info>'."\n".
+                'The <info>%command.name%</info> command searches for fonts by name.' . "\n\n" .
+                'Example: <info>php %command.full_name% roboto</info>' . "\n" .
+                'Example: <info>php %command.full_name% open --limit=10</info>' . "\n" .
                 'Example: <info>php %command.full_name% sans --provider=google</info>'
             );
     }
@@ -45,7 +45,7 @@ final class FontsSearchCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $query = $input->getArgument('query');
-        if (! is_string($query)) {
+        if (!is_string($query)) {
             $io->error('Query must be a string');
 
             return Command::FAILURE;
@@ -60,7 +60,7 @@ final class FontsSearchCommand extends Command
                 ? $this->providerRegistry->getProvider($providerName)
                 : $this->providerRegistry->getDefaultProvider();
 
-            if (! $provider->supports(ProviderFeature::SEARCH)) {
+            if (!$provider->supports(ProviderFeature::SEARCH)) {
                 $io->error(sprintf(
                     'Provider "%s" does not support search. Try using --provider=google',
                     $provider->getName()

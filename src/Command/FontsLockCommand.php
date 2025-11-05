@@ -35,8 +35,8 @@ final class FontsLockCommand extends Command
                 []
             )
             ->setHelp(
-                'The <info>%command.name%</info> command scans Twig templates for font_manager() function calls, '.
-                'downloads all referenced fonts, and creates a manifest file for production use.'."\n\n".
+                'The <info>%command.name%</info> command scans Twig templates for font_manager() function calls, ' .
+                'downloads all referenced fonts, and creates a manifest file for production use.' . "\n\n" .
                 'Example: <info>php %command.full_name%</info>'
             );
     }
@@ -52,8 +52,8 @@ final class FontsLockCommand extends Command
         // Default to common template directories
         if ([] === $templateDirs) {
             $defaultDirs = [
-                $this->projectDir.'/templates',
-                $this->projectDir.'/views',
+                $this->projectDir . '/templates',
+                $this->projectDir . '/views',
             ];
             $templateDirs = array_filter($defaultDirs, 'is_dir');
 
@@ -81,7 +81,7 @@ final class FontsLockCommand extends Command
         $fontList = [];
         /** @var array<array-key, mixed> $fonts */
         foreach ($fonts as $name => $config) {
-            if (! is_array($config)) {
+            if (!is_array($config)) {
                 continue;
             }
             /** @var array{weights?: array<int|string>, styles?: array<string>} $config */

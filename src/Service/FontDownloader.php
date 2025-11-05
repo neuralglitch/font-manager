@@ -76,7 +76,7 @@ final class FontDownloader
 
                 // Skip data URLs
                 if (str_starts_with($url, 'data:')) {
-                    return 'url('.$url.')';
+                    return 'url(' . $url . ')';
                 }
 
                 try {
@@ -110,27 +110,27 @@ final class FontDownloader
                 if ($monospace) {
                     $parts[] = 'mono';
                 }
-                $baseFilename = implode('-', $parts).$extension;
+                $baseFilename = implode('-', $parts) . $extension;
 
                 // Handle duplicate filenames by adding a counter
                 $filename = $baseFilename;
                 $counter = 1;
                 while (isset($files[$filename])) {
-                    $filename = implode('-', $parts).'-'.$counter.$extension;
+                    $filename = implode('-', $parts) . '-' . $counter . $extension;
                     ++$counter;
                 }
 
-                $filePath = $this->fontsDir.'/'.$filename;
+                $filePath = $this->fontsDir . '/' . $filename;
                 $this->filesystem->dumpFile($filePath, $content);
 
                 $files[$filename] = $filePath;
 
                 // Track the actual weight and style that were downloaded
-                if (! in_array($weight, $downloadedWeights, true)) {
+                if (!in_array($weight, $downloadedWeights, true)) {
                     $downloadedWeights[] = $weight;
                 }
                 $style = $isItalic ? 'italic' : 'normal';
-                if (! in_array($style, $downloadedStyles, true)) {
+                if (!in_array($style, $downloadedStyles, true)) {
                     $downloadedStyles[] = $style;
                 }
 
@@ -142,7 +142,7 @@ final class FontDownloader
             $css
         );
 
-        if (! is_string($processedCss)) {
+        if (!is_string($processedCss)) {
             throw new FontDownloadException('Failed to process CSS file URLs');
         }
 
@@ -150,10 +150,10 @@ final class FontDownloader
         $stylesheetCss = $this->generateStylesheetCss($fontName, $weights, $downloadedStyles, $monospace);
 
         // Combine @font-face declarations and intelligent styles
-        $combinedCss = $processedCss."\n\n".$stylesheetCss;
+        $combinedCss = $processedCss . "\n\n" . $stylesheetCss;
 
         // Save combined CSS file
-        $cssPath = $this->fontsDir.'/'.$sanitizedName.'.css';
+        $cssPath = $this->fontsDir . '/' . $sanitizedName . '.css';
         $this->filesystem->dumpFile($cssPath, $combinedCss);
 
         // Sort downloaded weights
@@ -179,7 +179,7 @@ final class FontDownloader
         array $styles,
         bool $monospace = false
     ): string {
-        $fontVar = '--font-family-'.FontVariantHelper::sanitizeFontName($fontName);
+        $fontVar = '--font-family-' . FontVariantHelper::sanitizeFontName($fontName);
         $fallbackFamily = $monospace ? 'monospace' : 'sans-serif';
         $fontFamily = sprintf("'%s', %s", $fontName, $fallbackFamily);
 

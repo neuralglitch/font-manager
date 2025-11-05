@@ -21,7 +21,7 @@ final class FontLockManagerTest extends TestCase
     protected function setUp(): void
     {
         $this->filesystem = new Filesystem();
-        $this->tempDir = sys_get_temp_dir().'/font-manager-test-'.uniqid();
+        $this->tempDir = sys_get_temp_dir() . '/font-manager-test-' . uniqid();
         $this->filesystem->mkdir($this->tempDir);
     }
 
@@ -32,10 +32,10 @@ final class FontLockManagerTest extends TestCase
 
     public function testScanTemplatesFindsFont(): void
     {
-        $templateDir = $this->tempDir.'/templates';
+        $templateDir = $this->tempDir . '/templates';
         $this->filesystem->mkdir($templateDir);
         $this->filesystem->dumpFile(
-            $templateDir.'/base.html.twig',
+            $templateDir . '/base.html.twig',
             "{{ font_manager('Roboto', '400 700', 'normal') }}"
         );
 
@@ -44,9 +44,9 @@ final class FontLockManagerTest extends TestCase
         $registry = new ProviderRegistry();
         $registry->registerProvider($googleProvider);
 
-        $downloader = new FontDownloader($this->tempDir.'/fonts', $httpClient, $registry, $this->filesystem);
+        $downloader = new FontDownloader($this->tempDir . '/fonts', $httpClient, $registry, $this->filesystem);
         $manager = new FontLockManager(
-            $this->tempDir.'/manifest.json',
+            $this->tempDir . '/manifest.json',
             $downloader,
             $this->filesystem
         );
@@ -68,8 +68,8 @@ final class FontLockManagerTest extends TestCase
         $registry = new ProviderRegistry();
         $registry->registerProvider($googleProvider);
 
-        $downloader = new FontDownloader($this->tempDir.'/fonts', $httpClient, $registry, $this->filesystem);
-        $manifestFile = $this->tempDir.'/manifest.json';
+        $downloader = new FontDownloader($this->tempDir . '/fonts', $httpClient, $registry, $this->filesystem);
+        $manifestFile = $this->tempDir . '/manifest.json';
 
         $manager = new FontLockManager(
             $manifestFile,
@@ -101,8 +101,8 @@ final class FontLockManagerTest extends TestCase
         $registry = new ProviderRegistry();
         $registry->registerProvider($googleProvider);
 
-        $downloader = new FontDownloader($this->tempDir.'/fonts', $httpClient, $registry, $this->filesystem);
-        $manifestFile = $this->tempDir.'/manifest.json';
+        $downloader = new FontDownloader($this->tempDir . '/fonts', $httpClient, $registry, $this->filesystem);
+        $manifestFile = $this->tempDir . '/manifest.json';
 
         $manager = new FontLockManager(
             $manifestFile,

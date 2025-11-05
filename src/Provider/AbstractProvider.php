@@ -53,7 +53,7 @@ abstract class AbstractProvider implements FontProviderInterface
 
     public function isReady(): bool
     {
-        if (! $this->requiresAuth()) {
+        if (!$this->requiresAuth()) {
             return true;
         }
 
@@ -84,7 +84,7 @@ abstract class AbstractProvider implements FontProviderInterface
             self::$cache = [];
         }
 
-        if (! isset(self::$cache[$key])) {
+        if (!isset(self::$cache[$key])) {
             return null;
         }
 

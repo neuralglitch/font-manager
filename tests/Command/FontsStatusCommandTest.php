@@ -17,7 +17,7 @@ final class FontsStatusCommandTest extends TestCase
     protected function setUp(): void
     {
         $this->filesystem = new Filesystem();
-        $this->tempDir = sys_get_temp_dir().'/font-manager-test-'.uniqid();
+        $this->tempDir = sys_get_temp_dir() . '/font-manager-test-' . uniqid();
         $this->filesystem->mkdir($this->tempDir);
     }
 
@@ -28,7 +28,7 @@ final class FontsStatusCommandTest extends TestCase
 
     public function testExecuteWithNoManifest(): void
     {
-        $manifestFile = $this->tempDir.'/manifest.json';
+        $manifestFile = $this->tempDir . '/manifest.json';
 
         $command = new FontsStatusCommand($manifestFile, $this->filesystem);
         $commandTester = new CommandTester($command);
@@ -41,7 +41,7 @@ final class FontsStatusCommandTest extends TestCase
 
     public function testExecuteShowsLockedFonts(): void
     {
-        $manifestFile = $this->tempDir.'/manifest.json';
+        $manifestFile = $this->tempDir . '/manifest.json';
 
         $manifest = [
             'locked' => true,

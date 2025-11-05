@@ -21,7 +21,7 @@ final class LocalFontsProviderCompleteTest extends TestCase
     protected function setUp(): void
     {
         $this->filesystem = new Filesystem();
-        $this->tempDir = sys_get_temp_dir().'/font-manager-test-'.uniqid();
+        $this->tempDir = sys_get_temp_dir() . '/font-manager-test-' . uniqid();
         $this->filesystem->mkdir($this->tempDir);
     }
 
@@ -177,7 +177,7 @@ final class LocalFontsProviderCompleteTest extends TestCase
 
     public function testDownloadFontCssWithWoffFormat(): void
     {
-        $fontFile = $this->tempDir.'/test.woff';
+        $fontFile = $this->tempDir . '/test.woff';
         $this->filesystem->dumpFile($fontFile, 'fake-font');
 
         $config = [
@@ -198,7 +198,7 @@ final class LocalFontsProviderCompleteTest extends TestCase
 
     public function testDownloadFontCssWithTtfFormat(): void
     {
-        $fontFile = $this->tempDir.'/test.ttf';
+        $fontFile = $this->tempDir . '/test.ttf';
         $this->filesystem->dumpFile($fontFile, 'fake-font');
 
         $config = [
@@ -219,7 +219,7 @@ final class LocalFontsProviderCompleteTest extends TestCase
 
     public function testDownloadFontCssWithOtfFormat(): void
     {
-        $fontFile = $this->tempDir.'/test.otf';
+        $fontFile = $this->tempDir . '/test.otf';
         $this->filesystem->dumpFile($fontFile, 'fake-font');
 
         $config = [
@@ -240,7 +240,7 @@ final class LocalFontsProviderCompleteTest extends TestCase
 
     public function testDownloadFontCssWithEotFormat(): void
     {
-        $fontFile = $this->tempDir.'/test.eot';
+        $fontFile = $this->tempDir . '/test.eot';
         $this->filesystem->dumpFile($fontFile, 'fake-font');
 
         $config = [
@@ -261,7 +261,7 @@ final class LocalFontsProviderCompleteTest extends TestCase
 
     public function testDownloadFontCssWithCustomDisplay(): void
     {
-        $fontFile = $this->tempDir.'/test.woff2';
+        $fontFile = $this->tempDir . '/test.woff2';
         $this->filesystem->dumpFile($fontFile, 'fake-font');
 
         $config = [
@@ -282,8 +282,8 @@ final class LocalFontsProviderCompleteTest extends TestCase
 
     public function testDownloadFontCssWithMultipleStyles(): void
     {
-        $file1 = $this->tempDir.'/test-400-normal.woff2';
-        $file2 = $this->tempDir.'/test-400-italic.woff2';
+        $file1 = $this->tempDir . '/test-400-normal.woff2';
+        $file2 = $this->tempDir . '/test-400-italic.woff2';
         $this->filesystem->dumpFile($file1, 'fake-font');
         $this->filesystem->dumpFile($file2, 'fake-font');
 
@@ -309,7 +309,7 @@ final class LocalFontsProviderCompleteTest extends TestCase
 
     public function testValidateFontsReturnsEmptyWhenAllExist(): void
     {
-        $fontFile = $this->tempDir.'/test.woff2';
+        $fontFile = $this->tempDir . '/test.woff2';
         $this->filesystem->dumpFile($fontFile, 'fake-font');
 
         $config = [

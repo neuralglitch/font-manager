@@ -21,7 +21,7 @@ final class FontDownloaderTest extends TestCase
     protected function setUp(): void
     {
         $this->filesystem = new Filesystem();
-        $this->tempDir = sys_get_temp_dir().'/font-manager-test-'.uniqid();
+        $this->tempDir = sys_get_temp_dir() . '/font-manager-test-' . uniqid();
         $this->filesystem->mkdir($this->tempDir);
     }
 

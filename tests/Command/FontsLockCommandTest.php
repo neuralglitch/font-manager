@@ -22,7 +22,7 @@ final class FontsLockCommandTest extends TestCase
     protected function setUp(): void
     {
         $this->filesystem = new Filesystem();
-        $this->tempDir = sys_get_temp_dir().'/font-manager-test-'.uniqid();
+        $this->tempDir = sys_get_temp_dir() . '/font-manager-test-' . uniqid();
         $this->filesystem->mkdir($this->tempDir);
     }
 
@@ -38,9 +38,9 @@ final class FontsLockCommandTest extends TestCase
         $registry = new ProviderRegistry();
         $registry->registerProvider($googleProvider);
 
-        $downloader = new FontDownloader($this->tempDir.'/fonts', $httpClient, $registry, $this->filesystem);
+        $downloader = new FontDownloader($this->tempDir . '/fonts', $httpClient, $registry, $this->filesystem);
         $lockManager = new FontLockManager(
-            $this->tempDir.'/manifest.json',
+            $this->tempDir . '/manifest.json',
             $downloader,
             $this->filesystem
         );
@@ -56,10 +56,10 @@ final class FontsLockCommandTest extends TestCase
 
     public function testExecuteScansTemplates(): void
     {
-        $templateDir = $this->tempDir.'/templates';
+        $templateDir = $this->tempDir . '/templates';
         $this->filesystem->mkdir($templateDir);
         $this->filesystem->dumpFile(
-            $templateDir.'/test.html.twig',
+            $templateDir . '/test.html.twig',
             "{{ font_manager('Roboto', '400', 'normal') }}"
         );
 
@@ -68,9 +68,9 @@ final class FontsLockCommandTest extends TestCase
         $registry = new ProviderRegistry();
         $registry->registerProvider($googleProvider);
 
-        $downloader = new FontDownloader($this->tempDir.'/fonts', $httpClient, $registry, $this->filesystem);
+        $downloader = new FontDownloader($this->tempDir . '/fonts', $httpClient, $registry, $this->filesystem);
         $lockManager = new FontLockManager(
-            $this->tempDir.'/manifest.json',
+            $this->tempDir . '/manifest.json',
             $downloader,
             $this->filesystem
         );

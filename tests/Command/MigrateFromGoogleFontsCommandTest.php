@@ -17,7 +17,7 @@ final class MigrateFromGoogleFontsCommandTest extends TestCase
     protected function setUp(): void
     {
         $this->filesystem = new Filesystem();
-        $this->tempDir = sys_get_temp_dir().'/font-manager-test-'.uniqid();
+        $this->tempDir = sys_get_temp_dir() . '/font-manager-test-' . uniqid();
         $this->filesystem->mkdir($this->tempDir);
     }
 
@@ -39,10 +39,10 @@ final class MigrateFromGoogleFontsCommandTest extends TestCase
 
     public function testExecuteDryRun(): void
     {
-        $configDir = $this->tempDir.'/config/packages';
+        $configDir = $this->tempDir . '/config/packages';
         $this->filesystem->mkdir($configDir);
         $this->filesystem->dumpFile(
-            $configDir.'/google_fonts.yaml',
+            $configDir . '/google_fonts.yaml',
             "google_fonts:\n    lock_fonts: true\n"
         );
 
@@ -55,12 +55,12 @@ final class MigrateFromGoogleFontsCommandTest extends TestCase
         self::assertStringContainsString('DRY RUN', $output);
         self::assertStringContainsString('Would create', $output);
 
-        self::assertFalse($this->filesystem->exists($configDir.'/font_manager.yaml'));
+        self::assertFalse($this->filesystem->exists($configDir . '/font_manager.yaml'));
     }
 
     public function testExecuteMigratesConfiguration(): void
     {
-        $configDir = $this->tempDir.'/config/packages';
+        $configDir = $this->tempDir . '/config/packages';
         $this->filesystem->mkdir($configDir);
 
         $oldConfig = <<<'YAML'
@@ -70,7 +70,7 @@ google_fonts:
     use_locked_fonts: false
 YAML;
 
-        $this->filesystem->dumpFile($configDir.'/google_fonts.yaml', $oldConfig);
+        $this->filesystem->dumpFile($configDir . '/google_fonts.yaml', $oldConfig);
 
         $command = new MigrateFromGoogleFontsCommand($this->tempDir, $this->filesystem);
         $commandTester = new CommandTester($command);
@@ -78,10 +78,10 @@ YAML;
 
         self::assertSame(0, $commandTester->getStatusCode());
 
-        self::assertTrue($this->filesystem->exists($configDir.'/font_manager.yaml'));
-        self::assertTrue($this->filesystem->exists($configDir.'/google_fonts.yaml.backup'));
+        self::assertTrue($this->filesystem->exists($configDir . '/font_manager.yaml'));
+        self::assertTrue($this->filesystem->exists($configDir . '/google_fonts.yaml.backup'));
 
-        $newContent = file_get_contents($configDir.'/font_manager.yaml');
+        $newContent = file_get_contents($configDir . '/font_manager.yaml');
         self::assertIsString($newContent);
         self::assertStringContainsString('font_manager:', $newContent);
         self::assertStringContainsString("default_provider: 'google'", $newContent);
@@ -89,7 +89,7 @@ YAML;
 
     public function testExecuteMigratesTemplates(): void
     {
-        $templatesDir = $this->tempDir.'/templates';
+        $templatesDir = $this->tempDir . '/templates';
         $this->filesystem->mkdir($templatesDir);
 
         $oldTemplate = <<<'TWIG'
@@ -101,13 +101,13 @@ YAML;
 </head>
 TWIG;
 
-        $this->filesystem->dumpFile($templatesDir.'/base.html.twig', $oldTemplate);
+        $this->filesystem->dumpFile($templatesDir . '/base.html.twig', $oldTemplate);
 
         $command = new MigrateFromGoogleFontsCommand($this->tempDir, $this->filesystem);
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);
 
-        $newContent = file_get_contents($templatesDir.'/base.html.twig');
+        $newContent = file_get_contents($templatesDir . '/base.html.twig');
         self::assertIsString($newContent);
         self::assertStringContainsString('font_manager(', $newContent);
         self::assertStringNotContainsString('google_fonts(', $newContent);
@@ -115,7 +115,7 @@ TWIG;
 
     public function testExecuteMigratesManifest(): void
     {
-        $varDir = $this->tempDir.'/var';
+        $varDir = $this->tempDir . '/var';
         $this->filesystem->mkdir($varDir);
 
         $manifest = [
@@ -126,7 +126,7 @@ TWIG;
         ];
 
         $this->filesystem->dumpFile(
-            $varDir.'/google-fonts.lock.json',
+            $varDir . '/google-fonts.lock.json',
             (string) json_encode($manifest)
         );
 
@@ -135,9 +135,9 @@ TWIG;
         $commandTester->execute([]);
 
         self::assertSame(0, $commandTester->getStatusCode());
-        self::assertTrue($this->filesystem->exists($varDir.'/font-manager.lock.json'));
+        self::assertTrue($this->filesystem->exists($varDir . '/font-manager.lock.json'));
 
-        $manifestContent = file_get_contents($varDir.'/font-manager.lock.json');
+        $manifestContent = file_get_contents($varDir . '/font-manager.lock.json');
         self::assertIsString($manifestContent);
         $newManifest = json_decode($manifestContent, true);
         self::assertIsArray($newManifest);
@@ -148,10 +148,10 @@ TWIG;
 
     public function testExecuteSkipsTemplatesWhenRequested(): void
     {
-        $templatesDir = $this->tempDir.'/templates';
+        $templatesDir = $this->tempDir . '/templates';
         $this->filesystem->mkdir($templatesDir);
         $this->filesystem->dumpFile(
-            $templatesDir.'/base.html.twig',
+            $templatesDir . '/base.html.twig',
             "{{ google_fonts('Roboto', '400') }}"
         );
 
@@ -159,7 +159,7 @@ TWIG;
         $commandTester = new CommandTester($command);
         $commandTester->execute(['--skip-templates' => true]);
 
-        $content = file_get_contents($templatesDir.'/base.html.twig');
+        $content = file_get_contents($templatesDir . '/base.html.twig');
         self::assertIsString($content);
         self::assertStringContainsString('google_fonts(', $content);
         self::assertStringNotContainsString('font_manager(', $content);
@@ -167,10 +167,10 @@ TWIG;
 
     public function testExecuteSkipsConfigWhenRequested(): void
     {
-        $configDir = $this->tempDir.'/config/packages';
+        $configDir = $this->tempDir . '/config/packages';
         $this->filesystem->mkdir($configDir);
         $this->filesystem->dumpFile(
-            $configDir.'/google_fonts.yaml',
+            $configDir . '/google_fonts.yaml',
             "google_fonts:\n    lock_fonts: true\n"
         );
 
@@ -178,15 +178,15 @@ TWIG;
         $commandTester = new CommandTester($command);
         $commandTester->execute(['--skip-config' => true]);
 
-        self::assertFalse($this->filesystem->exists($configDir.'/font_manager.yaml'));
+        self::assertFalse($this->filesystem->exists($configDir . '/font_manager.yaml'));
     }
 
     public function testExecuteHandlesExistingFontManagerConfig(): void
     {
-        $configDir = $this->tempDir.'/config/packages';
+        $configDir = $this->tempDir . '/config/packages';
         $this->filesystem->mkdir($configDir);
-        $this->filesystem->dumpFile($configDir.'/google_fonts.yaml', "google_fonts:\n");
-        $this->filesystem->dumpFile($configDir.'/font_manager.yaml', "font_manager:\n");
+        $this->filesystem->dumpFile($configDir . '/google_fonts.yaml', "google_fonts:\n");
+        $this->filesystem->dumpFile($configDir . '/font_manager.yaml', "font_manager:\n");
 
         $command = new MigrateFromGoogleFontsCommand($this->tempDir, $this->filesystem);
         $commandTester = new CommandTester($command);
@@ -198,17 +198,17 @@ TWIG;
 
     public function testExecuteHandlesNestedTemplates(): void
     {
-        $templatesDir = $this->tempDir.'/templates';
-        $adminDir = $templatesDir.'/admin';
+        $templatesDir = $this->tempDir . '/templates';
+        $adminDir = $templatesDir . '/admin';
         $this->filesystem->mkdir($adminDir);
 
         $this->filesystem->dumpFile(
-            $templatesDir.'/base.html.twig',
+            $templatesDir . '/base.html.twig',
             "{{ google_fonts('Roboto', '400') }}"
         );
 
         $this->filesystem->dumpFile(
-            $adminDir.'/dashboard.html.twig',
+            $adminDir . '/dashboard.html.twig',
             "{{ google_fonts('Inter', '400') }}"
         );
 
@@ -216,8 +216,8 @@ TWIG;
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);
 
-        $baseContent = file_get_contents($templatesDir.'/base.html.twig');
-        $dashContent = file_get_contents($adminDir.'/dashboard.html.twig');
+        $baseContent = file_get_contents($templatesDir . '/base.html.twig');
+        $dashContent = file_get_contents($adminDir . '/dashboard.html.twig');
 
         self::assertIsString($baseContent);
         self::assertIsString($dashContent);

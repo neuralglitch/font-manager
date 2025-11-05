@@ -66,13 +66,13 @@ HELP
         $changes = [];
         $errors = [];
 
-        if (! $skipConfig) {
+        if (!$skipConfig) {
             $configResult = $this->migrateConfiguration($io, $dryRun);
             $changes = array_merge($changes, $configResult['changes']);
             $errors = array_merge($errors, $configResult['errors']);
         }
 
-        if (! $skipTemplates) {
+        if (!$skipTemplates) {
             $templateResult = $this->migrateTemplates($io, $dryRun);
             $changes = array_merge($changes, $templateResult['changes']);
             $errors = array_merge($errors, $templateResult['errors']);
@@ -127,10 +127,10 @@ HELP
         $changes = [];
         $errors = [];
 
-        $oldConfig = $this->projectDir.'/config/packages/google_fonts.yaml';
-        $newConfig = $this->projectDir.'/config/packages/font_manager.yaml';
+        $oldConfig = $this->projectDir . '/config/packages/google_fonts.yaml';
+        $newConfig = $this->projectDir . '/config/packages/font_manager.yaml';
 
-        if (! $this->filesystem->exists($oldConfig)) {
+        if (!$this->filesystem->exists($oldConfig)) {
             return ['changes' => [], 'errors' => []];
         }
 
@@ -152,7 +152,7 @@ HELP
         $newContent = str_replace('google_fonts:', 'font_manager:', $content);
         $newContent = str_replace('GOOGLE_FONTS_', 'GOOGLE_FONTS_', $newContent);
 
-        if (! str_contains($newContent, 'default_provider:')) {
+        if (!str_contains($newContent, 'default_provider:')) {
             $newContent = str_replace(
                 'font_manager:',
                 "font_manager:\n    default_provider: 'google'",
@@ -160,8 +160,8 @@ HELP
             );
         }
 
-        if (! $dryRun) {
-            $backupConfig = $oldConfig.'.backup';
+        if (!$dryRun) {
+            $backupConfig = $oldConfig . '.backup';
             $this->filesystem->copy($oldConfig, $backupConfig);
             $changes[] = "Backed up: {$oldConfig} → {$backupConfig}";
 
@@ -183,9 +183,9 @@ HELP
         $changes = [];
         $errors = [];
 
-        $templatesDir = $this->projectDir.'/templates';
+        $templatesDir = $this->projectDir . '/templates';
 
-        if (! $this->filesystem->exists($templatesDir)) {
+        if (!$this->filesystem->exists($templatesDir)) {
             return ['changes' => [], 'errors' => []];
         }
 
@@ -199,13 +199,13 @@ HELP
         foreach ($finder as $file) {
             $content = $file->getContents();
 
-            if (! str_contains($content, 'google_fonts(')) {
+            if (!str_contains($content, 'google_fonts(')) {
                 continue;
             }
 
             $newContent = str_replace('google_fonts(', 'font_manager(', $content);
 
-            if (! $dryRun) {
+            if (!$dryRun) {
                 file_put_contents($file->getRealPath(), $newContent);
             }
 
@@ -228,10 +228,10 @@ HELP
         $changes = [];
         $errors = [];
 
-        $oldManifest = $this->projectDir.'/var/google-fonts.lock.json';
-        $newManifest = $this->projectDir.'/var/font-manager.lock.json';
+        $oldManifest = $this->projectDir . '/var/google-fonts.lock.json';
+        $newManifest = $this->projectDir . '/var/font-manager.lock.json';
 
-        if (! $this->filesystem->exists($oldManifest)) {
+        if (!$this->filesystem->exists($oldManifest)) {
             return ['changes' => [], 'errors' => []];
         }
 
@@ -243,7 +243,7 @@ HELP
             return ['changes' => $changes, 'errors' => $errors];
         }
 
-        if (! $dryRun) {
+        if (!$dryRun) {
             $this->filesystem->copy($oldManifest, $newManifest);
             $changes[] = "Copied: {$oldManifest} → {$newManifest}";
             $changes[] = 'Note: Old manifest kept as backup (delete manually after verification)';

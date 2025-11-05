@@ -32,8 +32,8 @@ final class FontsPruneCommand extends Command
         $this
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Show what would be deleted without actually deleting')
             ->setHelp(
-                'The <info>%command.name%</info> command removes font files not referenced in the manifest.'."\n\n".
-                'Example: <info>php %command.full_name%</info>'."\n".
+                'The <info>%command.name%</info> command removes font files not referenced in the manifest.' . "\n\n" .
+                'Example: <info>php %command.full_name%</info>' . "\n" .
                 'Example: <info>php %command.full_name% --dry-run</info>'
             );
     }
@@ -45,7 +45,7 @@ final class FontsPruneCommand extends Command
 
         $dryRun = $input->getOption('dry-run');
 
-        if (! $this->filesystem->exists($this->manifestFile)) {
+        if (!$this->filesystem->exists($this->manifestFile)) {
             $io->warning('No manifest file found. Nothing to prune.');
 
             return Command::SUCCESS;
@@ -59,7 +59,7 @@ final class FontsPruneCommand extends Command
         }
 
         $manifest = json_decode($content, true);
-        if (! is_array($manifest)) {
+        if (!is_array($manifest)) {
             $io->error('Invalid manifest file');
 
             return Command::FAILURE;
@@ -68,7 +68,7 @@ final class FontsPruneCommand extends Command
         // Collect all referenced files
         $referencedFiles = [];
         foreach ($manifest['fonts'] ?? [] as $fontConfig) {
-            if (! is_array($fontConfig)) {
+            if (!is_array($fontConfig)) {
                 continue;
             }
             foreach ($fontConfig['files'] ?? [] as $file) {
@@ -81,7 +81,7 @@ final class FontsPruneCommand extends Command
             }
         }
 
-        if (! $this->filesystem->exists($this->fontsDir)) {
+        if (!$this->filesystem->exists($this->fontsDir)) {
             $io->info('Fonts directory does not exist. Nothing to prune.');
 
             return Command::SUCCESS;
@@ -94,7 +94,7 @@ final class FontsPruneCommand extends Command
         $toDelete = [];
         foreach ($finder as $file) {
             $filename = $file->getFilename();
-            if (! isset($referencedFiles[$filename])) {
+            if (!isset($referencedFiles[$filename])) {
                 $toDelete[] = $file->getPathname();
             }
         }
@@ -114,7 +114,7 @@ final class FontsPruneCommand extends Command
             return Command::SUCCESS;
         }
 
-        if (! $io->confirm(sprintf('Delete %d unused font files?', count($toDelete)), false)) {
+        if (!$io->confirm(sprintf('Delete %d unused font files?', count($toDelete)), false)) {
             $io->info('Cancelled.');
 
             return Command::SUCCESS;

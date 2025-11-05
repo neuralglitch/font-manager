@@ -20,7 +20,7 @@ final class FontManagerRuntimeTest extends TestCase
     protected function setUp(): void
     {
         $this->filesystem = new Filesystem();
-        $this->tempDir = sys_get_temp_dir().'/font-manager-test-'.uniqid();
+        $this->tempDir = sys_get_temp_dir() . '/font-manager-test-' . uniqid();
         $this->filesystem->mkdir($this->tempDir);
     }
 
@@ -114,7 +114,7 @@ final class FontManagerRuntimeTest extends TestCase
 
     public function testRenderLockedFonts(): void
     {
-        $manifestFile = $this->tempDir.'/manifest.json';
+        $manifestFile = $this->tempDir . '/manifest.json';
         $manifest = [
             'fonts' => [
                 'Roboto' => [

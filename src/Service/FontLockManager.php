@@ -57,16 +57,16 @@ final class FontLockManager
 
             foreach ($matches[1] as $args) {
                 $fontData = $this->parseFunctionArgs($args);
-                if (! isset($fontData['name'])) {
+                if (!isset($fontData['name'])) {
                     continue;
                 }
-                if (! is_string($fontData['name'])) {
+                if (!is_string($fontData['name'])) {
                     continue;
                 }
 
                 $fontName = trim($fontData['name'], '\'"');
 
-                if (! isset($fonts[$fontName])) {
+                if (!isset($fonts[$fontName])) {
                     $fonts[$fontName] = [
                         'weights' => [],
                         'styles' => [],
@@ -122,7 +122,7 @@ final class FontLockManager
         $currentFont = 0;
 
         foreach ($fonts as $fontName => $config) {
-            if (! is_array($config)) {
+            if (!is_array($config)) {
                 continue;
             }
 
@@ -154,7 +154,7 @@ final class FontLockManager
                 );
 
                 $sanitizedName = FontVariantHelper::sanitizeFontName($fontName);
-                $relativeCssPath = 'assets/fonts/'.$sanitizedName.'.css';
+                $relativeCssPath = 'assets/fonts/' . $sanitizedName . '.css';
 
                 // Use actually downloaded weights, not requested weights
                 $actualWeights = [] === $result['downloadedWeights'] ? $weights : $result['downloadedWeights'];
@@ -230,7 +230,7 @@ final class FontLockManager
         for ($i = 0; $i < strlen($args); ++$i) {
             $char = $args[$i];
 
-            if (! $inQuotes && ('\'' === $char || '"' === $char)) {
+            if (!$inQuotes && ('\'' === $char || '"' === $char)) {
                 $inQuotes = true;
                 $quoteChar = $char;
                 $current .= $char;
@@ -238,13 +238,13 @@ final class FontLockManager
                 $inQuotes = false;
                 $quoteChar = null;
                 $current .= $char;
-            } elseif (! $inQuotes && '[' === $char) {
+            } elseif (!$inQuotes && '[' === $char) {
                 ++$depth;
                 $current .= $char;
-            } elseif (! $inQuotes && ']' === $char) {
+            } elseif (!$inQuotes && ']' === $char) {
                 --$depth;
                 $current .= $char;
-            } elseif (! $inQuotes && 0 === $depth && ',' === $char) {
+            } elseif (!$inQuotes && 0 === $depth && ',' === $char) {
                 $parts[] = trim($current);
                 $current = '';
             } else {
