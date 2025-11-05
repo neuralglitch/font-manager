@@ -44,7 +44,6 @@ services:
 
     NeuralGlitch\FontManager\Service\FontLockManager:
         arguments:
-            $fontsDir: '%font_manager.fonts_dir%'
             $manifestFile: '%font_manager.manifest_file%'
             $fontDownloader: '@NeuralGlitch\FontManager\Service\FontDownloader'
             $filesystem: '@filesystem'
