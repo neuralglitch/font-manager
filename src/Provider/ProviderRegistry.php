@@ -85,7 +85,7 @@ final class ProviderRegistry
     {
         return array_filter(
             $this->providers,
-            fn (FontProviderInterface $provider) => $provider->isReady()
+            fn (FontProviderInterface $provider): bool => $provider->isReady()
         );
     }
 

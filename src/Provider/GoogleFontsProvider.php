@@ -126,7 +126,7 @@ final class GoogleFontsProvider extends AbstractProvider
     {
         $metadata = $this->getFontMetadata($fontName);
 
-        if (! $metadata || ! is_array($metadata)) {
+        if ([] === $metadata) {
             return ['weights' => [400], 'styles' => ['normal']];
         }
 

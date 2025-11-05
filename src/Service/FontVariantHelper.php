@@ -17,7 +17,7 @@ final class FontVariantHelper
     public static function generateVariants(array $weights, array $styles): array
     {
         $hasItalic = in_array('italic', $styles, true);
-        $weightList = array_map(fn ($w) => (int) $w, $weights);
+        $weightList = array_map(fn ($w): int => (int) $w, $weights);
 
         if ($hasItalic) {
             // Use ital,wght format: ital,wght@0,400;0,700;1,400;1,700
@@ -71,7 +71,7 @@ final class FontVariantHelper
         if (is_string($input)) {
             $parts = array_map('trim', explode(' ', $input));
 
-            return array_filter($parts, fn ($v) => '' !== $v);
+            return array_filter($parts, fn ($v): bool => '' !== $v);
         }
 
         return array_values(array_map('strval', $input));

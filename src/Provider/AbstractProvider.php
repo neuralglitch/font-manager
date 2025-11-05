@@ -50,7 +50,10 @@ abstract class AbstractProvider implements FontProviderInterface
 
     public function isReady(): bool
     {
-        return ! $this->requiresAuth() || $this->isAuthenticated();
+        if (! $this->requiresAuth()) {
+            return true;
+        }
+        return $this->isAuthenticated();
     }
 
     public function supports(ProviderFeature $feature): bool

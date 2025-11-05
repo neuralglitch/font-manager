@@ -82,20 +82,20 @@ HELP
         $changes = array_merge($changes, $manifestResult['changes']);
         $errors = array_merge($errors, $manifestResult['errors']);
 
-        if (empty($changes) && empty($errors)) {
+        if ($changes === [] && $errors === []) {
             $io->success('No google-fonts installation found or migration already complete');
 
             return Command::SUCCESS;
         }
 
-        if (! empty($changes)) {
+        if ($changes !== []) {
             $io->section('Summary of changes');
             foreach ($changes as $change) {
                 $io->writeln(sprintf('  %s %s', $dryRun ? '→' : '✓', $change));
             }
         }
 
-        if (! empty($errors)) {
+        if ($errors !== []) {
             $io->section('Errors');
             foreach ($errors as $error) {
                 $io->error($error);
