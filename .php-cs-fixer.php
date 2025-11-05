@@ -24,6 +24,7 @@ return (new PhpCsFixer\Config())
         ],
         'phpdoc_single_line_var_spacing' => true,
         'phpdoc_var_without_name' => true,
+        'phpdoc_align' => false, // Disable PHPDoc alignment
         'class_attributes_separation' => [
             'elements' => [
                 'method' => 'one',
