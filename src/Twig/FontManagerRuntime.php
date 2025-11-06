@@ -30,9 +30,9 @@ final class FontManagerRuntime implements RuntimeExtensionInterface
      * @param string                   $name      Font family name (e.g., "Ubuntu", "Roboto")
      * @param array<int|string>|string $weights   Font weights (e.g., "300 400 700" or [300, 400, 700])
      * @param array<string>|string     $styles    Font styles (e.g., "normal italic" or ["normal", "italic"])
-     * @param string|null              $display   Font display value (default: "swap")
      * @param bool                     $monospace Whether this is a monospace font (default: false)
-     * @param string|null              $provider  Provider name (google, bunny, local) or null for default
+     * @param string|null              $display   Font display value (default: "swap")
+     * @param string|null              $provider  Provider name (google, bunny, fontsource, local) or null for default from config
      *
      * @return string HTML string with font links and styles
      */
@@ -40,8 +40,8 @@ final class FontManagerRuntime implements RuntimeExtensionInterface
         string $name,
         array|string $weights = ['400'],
         array|string $styles = ['normal'],
-        ?string $display = null,
         bool $monospace = false,
+        ?string $display = null,
         ?string $provider = null
     ): string {
         // Normalize weights and styles

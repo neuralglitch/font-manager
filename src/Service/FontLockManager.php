@@ -24,7 +24,7 @@ final class FontLockManager
      *
      * @param string|array<string> $templateDirs
      *
-     * @return array<string, array{weights: array<int|string>, styles: array<string>}>
+     * @return array<string, array{weights: array<int|string>, styles: array<string>, monospace?: bool, provider?: string}>
      */
     public function scanTemplates($templateDirs): array
     {
@@ -93,6 +93,16 @@ final class FontLockManager
                 } elseif ([] === $fonts[$fontName]['styles']) {
                     // Default style
                     $fonts[$fontName]['styles'] = ['normal'];
+                }
+
+                // Store monospace flag if provided
+                if (isset($fontData['monospace']) && is_bool($fontData['monospace'])) {
+                    $fonts[$fontName]['monospace'] = $fontData['monospace'];
+                }
+
+                // Store provider if provided
+                if (isset($fontData['provider']) && is_string($fontData['provider'])) {
+                    $fonts[$fontName]['provider'] = $fontData['provider'];
                 }
             }
         }
@@ -165,7 +175,7 @@ final class FontLockManager
                     'files' => array_keys($result['files']),
                     'css' => $relativeCssPath,
                     'monospace' => $monospace,
-                    'provider' => $provider,
+                    'provider' => $result['provider'], // Use actual provider used, not requested
                 ];
             } catch (FontDownloadException $e) {
                 throw new FontDownloadException(sprintf('Failed to download font "%s": %s', $fontName, $e->getMessage()), 0, $e);
@@ -185,6 +195,8 @@ final class FontLockManager
 
     /**
      * Parse function arguments.
+     *
+     * font_manager(name, weights, styles, monospace, display, provider)
      *
      * @return array<string, mixed>
      */
@@ -209,6 +221,23 @@ final class FontLockManager
         // Third argument is styles (optional)
         if (isset($parts[2])) {
             $result['styles'] = trim($parts[2]);
+        }
+
+        // Fourth argument is monospace (optional)
+        if (isset($parts[3])) {
+            $value = strtolower(trim($parts[3]));
+            $result['monospace'] = 'true' === $value || '1' === $value;
+        }
+
+        // Fifth argument is display (optional) - we don't need to store this for locking
+
+        // Sixth argument is provider (optional) - last parameter, rarely used
+        if (isset($parts[5])) {
+            $value = trim($parts[5], '\'"');
+            // Store provider only if it's not null/empty
+            if ('null' !== strtolower($value) && '' !== $value) {
+                $result['provider'] = $value;
+            }
         }
 
         return $result;

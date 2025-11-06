@@ -41,6 +41,7 @@ services:
             $httpClient: '@http_client'
             $providerRegistry: '@NeuralGlitch\FontManager\Provider\ProviderRegistry'
             $filesystem: '@filesystem'
+            $unicodeSubsets: '%font_manager.unicode_subsets%'
 
     NeuralGlitch\FontManager\Service\FontLockManager:
         arguments:
@@ -60,14 +61,32 @@ services:
             $filesystem: '@filesystem'
         tags: ['twig.runtime']
 
-    # Commands
-    NeuralGlitch\FontManager\Command\:
-        resource: '../src/Command/*'
+    # Commands (explicit configuration for string parameters)
+    NeuralGlitch\FontManager\Command\FontsLockCommand:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
         tags: ['console.command']
-    
-    # Migration Command (needs explicit projectDir)
+
+    NeuralGlitch\FontManager\Command\FontsStatusCommand:
+        arguments:
+            $manifestFile: '%font_manager.manifest_file%'
+        tags: ['console.command']
+
+    NeuralGlitch\FontManager\Command\FontsPruneCommand:
+        arguments:
+            $manifestFile: '%font_manager.manifest_file%'
+            $fontsDir: '%font_manager.fonts_dir%'
+        tags: ['console.command']
+
     NeuralGlitch\FontManager\Command\MigrateFromGoogleFontsCommand:
         arguments:
             $projectDir: '%kernel.project_dir%'
-            $filesystem: '@filesystem'
+        tags: ['console.command']
+
+    # Commands with only service dependencies (autowired)
+    NeuralGlitch\FontManager\Command\FontsSearchCommand:
+        tags: ['console.command']
+
+    NeuralGlitch\FontManager\Command\FontsValidateCommand:
+        tags: ['console.command']
 

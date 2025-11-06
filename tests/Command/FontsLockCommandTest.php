@@ -63,7 +63,10 @@ final class FontsLockCommandTest extends TestCase
             "{{ font_manager('Roboto', '400', 'normal') }}"
         );
 
-        $httpClient = new MockHttpClient();
+        $httpClient = new MockHttpClient([
+            new \Symfony\Component\HttpClient\Response\MockResponse('@font-face { src: url(https://example.com/font.woff2); }'),
+            new \Symfony\Component\HttpClient\Response\MockResponse('font-data'),
+        ]);
         $googleProvider = new GoogleFontsProvider($httpClient);
         $registry = new ProviderRegistry();
         $registry->registerProvider($googleProvider);
