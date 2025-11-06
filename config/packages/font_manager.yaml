@@ -1,6 +1,9 @@
 font_manager:
-    # Default provider: google, bunny, or local
-    default_provider: google
+    # Default provider: google, bunny, fontsource or local
+    default_provider: bunny
+
+    # Unicode subsets to include (reduces file count)
+    unicode_subsets: [ 'latin', 'latin-ext' ]  # Default
 
     # Cache TTL for API responses (seconds)
     cache_ttl: 3600
@@ -31,3 +34,7 @@ font_manager:
             directory: '%kernel.project_dir%/assets/fonts/custom'
             fonts: {}
 
+# Production configuration
+when@prod:
+    font_manager:
+        use_locked_fonts: true

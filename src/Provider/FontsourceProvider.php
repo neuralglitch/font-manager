@@ -62,7 +62,9 @@ final class FontsourceProvider extends AbstractProvider
 
     public function getFontMetadata(string $fontName): ?array
     {
-        $packageName = '@fontsource/' . $fontName;
+        // Fontsource uses lowercase-kebab-case for package names
+        $normalizedFontName = $this->normalizeFontName($fontName);
+        $packageName = '@fontsource/' . $normalizedFontName;
 
         try {
             $response = $this->httpClient->request('GET', self::NPM_REGISTRY . '/' . $packageName);
@@ -97,8 +99,11 @@ final class FontsourceProvider extends AbstractProvider
         array $styles,
         FontDisplay $display = FontDisplay::SWAP
     ): string {
-        $version = $this->getLatestVersion($fontName);
-        $packageName = '@fontsource/' . $fontName;
+        // Fontsource uses lowercase-kebab-case for package names
+        // Convert "Ubuntu Mono" -> "ubuntu-mono"
+        $normalizedFontName = $this->normalizeFontName($fontName);
+        $version = $this->getLatestVersion($normalizedFontName);
+        $packageName = '@fontsource/' . $normalizedFontName;
         $css = '';
 
         // Download CSS for each weight (Fontsource has separate CSS per weight)
@@ -113,7 +118,14 @@ final class FontsourceProvider extends AbstractProvider
                 );
 
                 $response = $this->httpClient->request('GET', $url);
-                $css .= $response->getContent() . "\n";
+                $weightCss = $response->getContent();
+
+                // Convert relative URLs to absolute CDN URLs
+                // Fontsource uses relative paths like "./files/ubuntu-latin-400-normal.woff2"
+                $baseUrl = sprintf('%s/%s@%s', self::CDN_BASE, $packageName, $version);
+                $weightCss = $this->convertRelativeUrls($weightCss, $baseUrl);
+
+                $css .= $weightCss . "\n";
             } catch (\Exception) {
                 // Skip if weight not available
                 continue;
@@ -133,8 +145,10 @@ final class FontsourceProvider extends AbstractProvider
         array $styles,
         FontDisplay $display = FontDisplay::SWAP
     ): string {
-        $version = $this->getLatestVersion($fontName);
-        $packageName = '@fontsource/' . $fontName;
+        // Fontsource uses lowercase-kebab-case for package names
+        $normalizedFontName = $this->normalizeFontName($fontName);
+        $version = $this->getLatestVersion($normalizedFontName);
+        $packageName = '@fontsource/' . $normalizedFontName;
         $parts = [];
 
         // Preconnect to jsdelivr
@@ -153,6 +167,51 @@ final class FontsourceProvider extends AbstractProvider
         }
 
         return implode("\n", $parts);
+    }
+
+    /**
+     * Convert relative URLs in CSS to absolute CDN URLs.
+     *
+     * Fontsource uses relative paths like "./files/ubuntu-latin-400-normal.woff2"
+     * which need to be converted to absolute URLs for downloading.
+     */
+    private function convertRelativeUrls(string $css, string $baseUrl): string
+    {
+        // Replace relative URLs: url(./files/...) or url("./files/...")
+        $css = preg_replace_callback(
+            '/url\([\'"]?\.\/([^\)\'\"]+)[\'"]?\)/i',
+            function (array $matches) use ($baseUrl): string {
+                $relativePath = $matches[1];
+                $absoluteUrl = $baseUrl . '/' . $relativePath;
+
+                return 'url(' . $absoluteUrl . ')';
+            },
+            $css
+        );
+
+        return $css ?? '';
+    }
+
+    /**
+     * Normalize font name to Fontsource package name format.
+     *
+     * Fontsource uses lowercase-kebab-case for package names:
+     * - "Ubuntu" -> "ubuntu"
+     * - "Ubuntu Mono" -> "ubuntu-mono"
+     * - "JetBrains Mono" -> "jetbrains-mono"
+     */
+    private function normalizeFontName(string $fontName): string
+    {
+        // Convert to lowercase
+        $normalized = strtolower($fontName);
+
+        // Replace spaces with hyphens
+        $normalized = str_replace(' ', '-', $normalized);
+
+        // Remove any non-alphanumeric characters except hyphens
+        $normalized = preg_replace('/[^a-z0-9\-]/', '', $normalized) ?? $normalized;
+
+        return $normalized;
     }
 
     /**

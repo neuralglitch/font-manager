@@ -20,6 +20,9 @@ font_manager:
     # Font lock manifest file
     manifest_file: '%kernel.project_dir%/var/font-manager.lock.json'
 
+    # Unicode subsets to include (reduces file count)
+    unicode_subsets: ['latin', 'latin-ext']  # Default: European languages
+
     # Provider configurations
     providers:
         google:
@@ -54,7 +57,7 @@ font_manager:
 
 **Type:** `string`  
 **Default:** `google`  
-**Values:** `google`, `bunny`, `local`
+**Values:** `google`, `bunny`, `fontsource`, `local`
 
 Which provider to use by default when no provider is specified.
 
@@ -62,6 +65,8 @@ Which provider to use by default when no provider is specified.
 font_manager:
     default_provider: bunny  # Privacy-friendly
 ```
+
+**Note:** When using `bunny` as default, the `fonts:search` command automatically falls back to Google Fonts API (Bunny uses the same catalog but doesn't provide a search API).
 
 #### `cache_ttl`
 
@@ -112,6 +117,47 @@ Path to the font lock manifest file.
 font_manager:
     manifest_file: '%kernel.project_dir%/var/fonts.lock.json'
 ```
+
+#### `unicode_subsets`
+
+**Type:** `array<string>`  
+**Default:** `['latin', 'latin-ext']`
+
+Unicode character subsets to include when downloading fonts. This significantly reduces file count and improves performance.
+
+```yaml
+font_manager:
+    # Default: European languages only
+    unicode_subsets: ['latin', 'latin-ext']  # ~83% fewer files
+```
+
+**Available subsets:**
+- `latin` - Basic Latin (A-Z, common punctuation)
+- `latin-ext` - Extended Latin (accented characters)
+- `cyrillic` - Russian, Ukrainian, etc.
+- `cyrillic-ext` - Extended Cyrillic
+- `greek` - Greek alphabet
+- `greek-ext` - Extended Greek
+
+**Examples:**
+
+```yaml
+# Russian/Ukrainian support
+unicode_subsets: ['latin', 'latin-ext', 'cyrillic']  # 12 files per font
+
+# Greek support
+unicode_subsets: ['latin', 'latin-ext', 'greek']  # 12 files per font
+
+# All languages (no filtering)
+unicode_subsets: []  # 48 files per font
+```
+
+**File count comparison:**
+- Default `['latin', 'latin-ext']`: **8 files** per font (Ubuntu 4 weights = 8 total)
+- With cyrillic: **12 files** per font
+- All subsets `[]`: **48 files** per font
+
+**Note:** Only affects Google Fonts, Bunny Fonts, and Fontsource. Local fonts are not filtered.
 
 ---
 

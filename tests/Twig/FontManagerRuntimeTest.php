@@ -57,7 +57,8 @@ final class FontManagerRuntimeTest extends TestCase
 
         $runtime = new FontManagerRuntime($registry, false, null, $this->filesystem);
 
-        $html = $runtime->renderFonts('Roboto', [400, 700], ['normal'], 'swap', false, 'bunny');
+        // New parameter order: name, weights, styles, monospace, display, provider
+        $html = $runtime->renderFonts('Roboto', [400, 700], ['normal'], false, 'swap', 'bunny');
 
         self::assertStringContainsString('fonts.bunny.net', $html);
         self::assertStringNotContainsString('googleapis', $html);
@@ -88,7 +89,8 @@ final class FontManagerRuntimeTest extends TestCase
 
         $runtime = new FontManagerRuntime($registry, false, null, $this->filesystem);
 
-        $html = $runtime->renderFonts('JetBrains Mono', [400], ['normal'], 'swap', true);
+        // New parameter order: name, weights, styles, monospace, provider, display
+        $html = $runtime->renderFonts('JetBrains Mono', [400], ['normal'], true);
 
         self::assertStringContainsString('code', $html);
         self::assertStringContainsString('pre', $html);

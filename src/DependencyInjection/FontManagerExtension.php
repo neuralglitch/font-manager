@@ -28,6 +28,7 @@ final class FontManagerExtension extends Extension
             'font_manager.manifest_file',
             $config['manifest_file'] ?? '%kernel.project_dir%/var/font-manager.lock.json'
         );
+        $container->setParameter('font_manager.unicode_subsets', $config['unicode_subsets'] ?? ['latin', 'latin-ext']);
 
         // Provider configurations
         $container->setParameter('font_manager.providers', $config['providers'] ?? []);

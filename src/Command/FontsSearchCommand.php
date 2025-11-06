@@ -56,9 +56,19 @@ final class FontsSearchCommand extends Command
         $limit = is_string($limitOption) ? (int) $limitOption : 20;
 
         try {
-            $provider = null !== $providerName && is_string($providerName)
-                ? $this->providerRegistry->getProvider($providerName)
-                : $this->providerRegistry->getDefaultProvider();
+            // Get provider for search
+            if (null !== $providerName && is_string($providerName)) {
+                $provider = $this->providerRegistry->getProvider($providerName);
+            } else {
+                $provider = $this->providerRegistry->getDefaultProvider();
+
+                // Bunny Fonts doesn't have search API - automatically use Google Fonts instead
+                // (Bunny uses the same font catalog as Google)
+                if ('bunny' === $provider->getName()) {
+                    $io->note('Bunny Fonts uses the same catalog as Google Fonts. Searching via Google Fonts API...');
+                    $provider = $this->providerRegistry->getProvider('google');
+                }
+            }
 
             if (!$provider->supports(ProviderFeature::SEARCH)) {
                 $io->error(sprintf(
