@@ -319,4 +319,25 @@ final class FontLockManager
     {
         return $this->manifestFile;
     }
+
+    /**
+     * Load manifest from file.
+     *
+     * @return array<string, mixed>
+     */
+    public function loadManifest(): array
+    {
+        if (!$this->filesystem->exists($this->manifestFile)) {
+            return [];
+        }
+
+        $content = file_get_contents($this->manifestFile);
+        if (false === $content) {
+            return [];
+        }
+
+        $decoded = json_decode($content, true);
+
+        return is_array($decoded) ? $decoded : [];
+    }
 }

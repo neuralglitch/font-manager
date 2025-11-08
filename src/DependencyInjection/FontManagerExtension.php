@@ -36,6 +36,19 @@ final class FontManagerExtension extends Extension
         $container->setParameter('font_manager.providers.bunny', $config['providers']['bunny'] ?? ['enabled' => true]);
         $container->setParameter('font_manager.providers.fontsource', $config['providers']['fontsource'] ?? ['enabled' => true]);
         $container->setParameter('font_manager.providers.local', $config['providers']['local'] ?? ['enabled' => false]);
+
+        // Build tool configuration
+        $container->setParameter('font_manager.build.tool', $config['build']['tool'] ?? 'auto');
+
+        // Export configuration
+        $container->setParameter('font_manager.export.auto_detect', $config['export']['auto_detect'] ?? false);
+        $container->setParameter('font_manager.export.formats', $config['export']['formats'] ?? ['css_variables']);
+        $container->setParameter('font_manager.export.output', $config['export']['output'] ?? [
+            'base_dir' => '%kernel.project_dir%',
+            'fonts_dir' => 'auto',
+            'styles_dir' => 'auto',
+            'config_dir' => 'auto',
+        ]);
     }
 
     public function getAlias(): string

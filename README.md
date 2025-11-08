@@ -27,10 +27,14 @@
 - **Privacy-Friendly** - GDPR-compliant options (Bunny Fonts, Fontsource)
 - **Development Mode** - CDN with inline styles
 - **Production Mode** - Lock fonts locally for better performance and privacy
+- **Multi-Format Export** - Export fonts in 12+ formats (CSS, SCSS, Tailwind, TypeScript, Design Tokens, and more)
+- **Build Tool Support** - AssetMapper, Webpack, and Vite auto-detection
+- **Framework Integration** - Bootstrap SCSS variables, Tailwind config, CSS custom properties
+- **Design System Ready** - W3C Design Tokens, Figma Tokens, Style Dictionary
 - **Smart CSS** - Automatic font styling for body, headings, and bold text
-- **CLI Tools** - Search, lock, validate, and prune commands
+- **CLI Tools** - Search, lock, validate, prune, and export commands
 - **Custom Fonts** - Support for self-hosted brand fonts
-- **Type-Safe** - PHP 8.1 enums for display and features
+- **Type-Safe** - PHP 8.1 enums and TypeScript definitions
 
 ## Supported Providers
 
@@ -75,15 +79,46 @@ composer require neuralglitch/font-manager
 php bin/console fonts:lock
 ```
 
-This downloads fonts to `assets/fonts/` (served by AssetMapper in dev, compiled to `public/` in prod).
+This downloads fonts to `assets/fonts/` and automatically exports them in configured formats.
 
 The bundle automatically switches to locked fonts in production.
 
-### 3. Optional: Search for fonts
+### 3. Configure export formats (optional)
+
+```yaml
+# config/packages/font_manager.yaml
+font_manager:
+  build:
+    tool: 'auto'  # auto-detect: assetmapper, webpack, or vite
+  
+  export:
+    formats:
+      - css_variables      # CSS custom properties
+      - scss_bootstrap     # Bootstrap SCSS variables
+      - tailwind_config    # Tailwind CSS configuration
+      - typescript_definitions  # TypeScript type definitions
+```
+
+Available formats:
+- **CSS**: `css_variables`, `css_modules`, `css_layer`
+- **SCSS**: `scss_variables`, `scss_bootstrap`, `scss_mixins`
+- **JavaScript**: `esm_javascript`, `tailwind_config`, `typescript_definitions`
+- **Design System**: `json`, `design_tokens`, `figma_tokens`, `style_dictionary`
+
+### 4. Optional: Search and export
 
 ```bash
 # Search available fonts (requires API key for Google provider)
 php bin/console fonts:search roboto --provider=google
+
+# Export fonts in specific formats
+php bin/console fonts:export --format=scss_bootstrap --format=tailwind_config
+
+# List all available export formats
+php bin/console fonts:formats
+
+# Show usage instructions for a format
+php bin/console fonts:format:info scss_bootstrap
 
 # Validate local fonts
 php bin/console fonts:validate
@@ -114,8 +149,69 @@ php bin/console fonts:migrate-from-google-fonts            # Apply
 
 See [Migration Guide](docs/migration.md) for details.
 
+## Multi-Format Export
+
+Font Manager can export fonts in 12+ formats for seamless framework integration:
+
+### Bootstrap Integration
+
+```yaml
+# config/packages/font_manager.yaml
+font_manager:
+  export:
+    formats:
+      - scss_bootstrap
+```
+
+```scss
+// app.scss
+@import './assets/styles/fonts-bootstrap';  // Font Manager variables
+@import 'bootstrap/scss/bootstrap';         // Bootstrap uses your fonts
+```
+
+### Tailwind Integration
+
+```yaml
+font_manager:
+  export:
+    formats:
+      - tailwind_config
+```
+
+```javascript
+// tailwind.config.js
+const fontConfig = require('./assets/fonts-tailwind.config.js');
+
+module.exports = {
+  theme: {
+    extend: {
+      fontFamily: fontConfig.fontFamily,
+    },
+  },
+};
+```
+
+### TypeScript Integration
+
+```yaml
+font_manager:
+  export:
+    formats:
+      - typescript_definitions
+```
+
+```typescript
+// app.ts
+import { fonts, type FontFamily } from './assets/fonts';
+
+function applyFont(element: HTMLElement, family: FontFamily) {
+  element.style.fontFamily = fonts[family].family; // Type-safe!
+}
+```
+
 ## Documentation
 
+- **[Export Formats](docs/exports.md)** - Multi-format export guide (CSS, SCSS, Tailwind, TypeScript, Design Tokens)
 - **[Usage Guide](docs/usage.md)** - Function parameters and examples
 - **[Providers](docs/providers.md)** - Provider comparison and setup
 - **[Commands](docs/commands.md)** - CLI command reference

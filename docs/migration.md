@@ -271,6 +271,7 @@ Templates automatically work - no changes needed!
 ## Need Help?
 
 - [Full Documentation](../README.md#documentation)
+- [Export Formats](exports.md)
 - [GitHub Issues](https://github.com/neuralglitch/font-manager/issues)
 - [Provider Guide](providers.md)
 

@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace NeuralGlitch\FontManager\Tests\Command;
 
 use NeuralGlitch\FontManager\Command\FontsLockCommand;
+use NeuralGlitch\FontManager\Exporter\ExporterRegistry;
 use NeuralGlitch\FontManager\Provider\GoogleFontsProvider;
 use NeuralGlitch\FontManager\Provider\ProviderRegistry;
+use NeuralGlitch\FontManager\Service\BuildToolDetector;
+use NeuralGlitch\FontManager\Service\ExporterOrchestrator;
 use NeuralGlitch\FontManager\Service\FontDownloader;
 use NeuralGlitch\FontManager\Service\FontLockManager;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpClient\MockHttpClient;
 
@@ -45,7 +49,12 @@ final class FontsLockCommandTest extends TestCase
             $this->filesystem
         );
 
-        $command = new FontsLockCommand($lockManager, $this->tempDir);
+        $exporterRegistry = new ExporterRegistry();
+        $orchestrator = new ExporterOrchestrator($exporterRegistry, $this->filesystem);
+        $buildToolDetector = new BuildToolDetector($this->filesystem);
+        $params = new ParameterBag(['font_manager.export.formats' => []]);
+
+        $command = new FontsLockCommand($lockManager, $orchestrator, $buildToolDetector, $params, $this->tempDir);
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);
 
@@ -78,7 +87,12 @@ final class FontsLockCommandTest extends TestCase
             $this->filesystem
         );
 
-        $command = new FontsLockCommand($lockManager, $this->tempDir);
+        $exporterRegistry = new ExporterRegistry();
+        $orchestrator = new ExporterOrchestrator($exporterRegistry, $this->filesystem);
+        $buildToolDetector = new BuildToolDetector($this->filesystem);
+        $params = new ParameterBag(['font_manager.export.formats' => []]);
+
+        $command = new FontsLockCommand($lockManager, $orchestrator, $buildToolDetector, $params, $this->tempDir);
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);
 
