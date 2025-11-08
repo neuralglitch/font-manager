@@ -55,11 +55,14 @@ php bin/console fonts:search --limit=10 sans
 Scan templates and lock all used fonts for production.
 
 ```bash
-# Scan default template directories
+# Scan default template directories (with auto-export)
 php bin/console fonts:lock
 
 # Scan specific directories
 php bin/console fonts:lock templates/ views/
+
+# Skip automatic export
+php bin/console fonts:lock --no-export
 ```
 
 **What it does:**
@@ -67,11 +70,16 @@ php bin/console fonts:lock templates/ views/
 2. Downloads all referenced fonts
 3. Creates manifest file
 4. Saves fonts to `assets/fonts/`
+5. **Automatically exports configured formats**
 
 **Output:**
 - Font files: `assets/fonts/{font-name}-{weight}-{style}.woff2`
 - CSS file: `assets/fonts/{font-name}.css`
 - Manifest: `var/font-manager.lock.json`
+- **Export files:** Based on configured formats (see [Export Guide](exports.md))
+
+**Options:**
+- `--no-export` - Skip automatic export after locking
 
 ---
 
@@ -128,6 +136,96 @@ php bin/console fonts:prune
 
 ---
 
+## fonts:export
+
+Export fonts in configured or specific formats.
+
+```bash
+# Export all configured formats
+php bin/console fonts:export
+
+# Export specific formats
+php bin/console fonts:export --format=scss_bootstrap --format=tailwind_config
+
+# Dry run (preview without writing)
+php bin/console fonts:export --dry-run
+
+# Specify build tool
+php bin/console fonts:export --build-tool=webpack
+```
+
+**What it does:**
+1. Loads locked fonts from manifest
+2. Exports in requested formats
+3. Resolves dependencies automatically
+4. Writes files to appropriate directories
+
+**Options:**
+- `--format=NAME` - Export specific format(s) (repeatable)
+- `--dry-run` - Preview without writing files
+- `--build-tool=NAME` - Override build tool detection (auto, assetmapper, webpack, vite)
+
+See [Export Formats Guide](exports.md) for all available formats.
+
+---
+
+## fonts:formats
+
+List all available export formats.
+
+```bash
+php bin/console fonts:formats
+```
+
+**Output:**
+Shows all available export formats grouped by category (CSS, SCSS, JavaScript, Design System).
+
+**Example output:**
+```
+CSS
+  css_variables      CSS Custom Properties      .css
+  css_modules        CSS Modules Export         .module.css
+  css_layer          CSS @layer Integration     .css
+
+SCSS
+  scss_variables     SCSS Variables             .scss
+  scss_bootstrap     SCSS Bootstrap Variables   .scss
+  scss_mixins        SCSS Mixins & Functions    .scss
+
+JavaScript
+  esm_javascript     ES Modules                 .js
+  tailwind_config    Tailwind Configuration     .js
+  typescript_definitions TypeScript Definitions  .d.ts
+
+Design System
+  json               Generic JSON               .json
+  design_tokens      W3C Design Tokens          .tokens.json
+  figma_tokens       Figma Tokens Studio        .figma.json
+  style_dictionary   Style Dictionary Format    .js
+```
+
+---
+
+## fonts:format:info
+
+Show detailed usage instructions for an export format.
+
+```bash
+php bin/console fonts:format:info scss_bootstrap
+```
+
+**What it shows:**
+- Format name and label
+- File extension
+- Default filename
+- Dependencies
+- Detailed usage instructions
+- Export examples
+
+**Use case:** Learn how to integrate a specific export format in your project.
+
+---
+
 ## Typical Workflows
 
 ### Development Workflow
@@ -146,16 +244,19 @@ php bin/console fonts:search inter
 ### Production Deployment
 
 ```bash
-# 1. Lock fonts before deployment
+# 1. Lock fonts before deployment (auto-exports configured formats)
 php bin/console fonts:lock
 
 # 2. Check status
 php bin/console fonts:status
 
-# 3. Compile assets
+# 3. Verify exports
+php bin/console fonts:formats
+
+# 4. Compile assets
 php bin/console asset-map:compile
 
-# 4. Deploy
+# 5. Deploy
 ```
 
 ### Maintenance
@@ -171,6 +272,7 @@ php bin/console fonts:validate
 ---
 
 For more information:
+- [Export Formats](exports.md)
 - [Usage Guide](usage.md)
 - [Providers](providers.md)
 - [Configuration](configuration.md)

@@ -65,6 +65,7 @@ services:
     NeuralGlitch\FontManager\Command\FontsLockCommand:
         arguments:
             $projectDir: '%kernel.project_dir%'
+            $params: '@parameter_bag'
         tags: ['console.command']
 
     NeuralGlitch\FontManager\Command\FontsStatusCommand:
@@ -88,5 +89,63 @@ services:
         tags: ['console.command']
 
     NeuralGlitch\FontManager\Command\FontsValidateCommand:
+        tags: ['console.command']
+
+    # Exporters - CSS
+    NeuralGlitch\FontManager\Exporter\Css\CssVariablesExporter: ~
+    NeuralGlitch\FontManager\Exporter\Css\CssModulesExporter: ~
+    NeuralGlitch\FontManager\Exporter\Css\CssLayerExporter: ~
+
+    # Exporters - SCSS
+    NeuralGlitch\FontManager\Exporter\Scss\ScssVariablesExporter: ~
+    NeuralGlitch\FontManager\Exporter\Scss\ScssBootstrapExporter: ~
+    NeuralGlitch\FontManager\Exporter\Scss\ScssMixinsExporter: ~
+
+    # Exporters - JavaScript
+    NeuralGlitch\FontManager\Exporter\JavaScript\EsmExporter: ~
+    NeuralGlitch\FontManager\Exporter\JavaScript\TailwindConfigExporter: ~
+    NeuralGlitch\FontManager\Exporter\JavaScript\TypeScriptExporter: ~
+
+    # Exporters - Design System
+    NeuralGlitch\FontManager\Exporter\DesignSystem\JsonExporter: ~
+    NeuralGlitch\FontManager\Exporter\DesignSystem\DesignTokensExporter: ~
+    NeuralGlitch\FontManager\Exporter\DesignSystem\FigmaTokensExporter: ~
+    NeuralGlitch\FontManager\Exporter\DesignSystem\StyleDictionaryExporter: ~
+
+    # Exporter Registry
+    NeuralGlitch\FontManager\Exporter\ExporterRegistry:
+        calls:
+            - register: ['@NeuralGlitch\FontManager\Exporter\Css\CssVariablesExporter']
+            - register: ['@NeuralGlitch\FontManager\Exporter\Css\CssModulesExporter']
+            - register: ['@NeuralGlitch\FontManager\Exporter\Css\CssLayerExporter']
+            - register: ['@NeuralGlitch\FontManager\Exporter\Scss\ScssVariablesExporter']
+            - register: ['@NeuralGlitch\FontManager\Exporter\Scss\ScssBootstrapExporter']
+            - register: ['@NeuralGlitch\FontManager\Exporter\Scss\ScssMixinsExporter']
+            - register: ['@NeuralGlitch\FontManager\Exporter\JavaScript\EsmExporter']
+            - register: ['@NeuralGlitch\FontManager\Exporter\JavaScript\TailwindConfigExporter']
+            - register: ['@NeuralGlitch\FontManager\Exporter\JavaScript\TypeScriptExporter']
+            - register: ['@NeuralGlitch\FontManager\Exporter\DesignSystem\JsonExporter']
+            - register: ['@NeuralGlitch\FontManager\Exporter\DesignSystem\DesignTokensExporter']
+            - register: ['@NeuralGlitch\FontManager\Exporter\DesignSystem\FigmaTokensExporter']
+            - register: ['@NeuralGlitch\FontManager\Exporter\DesignSystem\StyleDictionaryExporter']
+
+    # Build Tool Detection & Orchestration
+    NeuralGlitch\FontManager\Service\BuildToolDetector: ~
+
+    NeuralGlitch\FontManager\Service\ExporterOrchestrator:
+        arguments:
+            $registry: '@NeuralGlitch\FontManager\Exporter\ExporterRegistry'
+            $filesystem: '@filesystem'
+
+    # New Export Commands
+    NeuralGlitch\FontManager\Command\FontsExportCommand:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+        tags: ['console.command']
+
+    NeuralGlitch\FontManager\Command\FontsFormatsCommand:
+        tags: ['console.command']
+
+    NeuralGlitch\FontManager\Command\FontsFormatInfoCommand:
         tags: ['console.command']
 

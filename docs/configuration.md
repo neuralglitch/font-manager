@@ -23,6 +23,24 @@ font_manager:
     # Unicode subsets to include (reduces file count)
     unicode_subsets: ['latin', 'latin-ext']  # Default: European languages
 
+    # Build tool configuration
+    build:
+        tool: 'auto'  # auto | assetmapper | webpack | vite
+
+    # Export formats configuration
+    export:
+        auto_detect: false  # Auto-detect required formats
+        formats:
+            - css_variables
+            - scss_bootstrap
+            - tailwind_config
+            - typescript_definitions
+        output:
+            base_dir: '%kernel.project_dir%'
+            fonts_dir: 'auto'
+            styles_dir: 'auto'
+            config_dir: 'auto'
+
     # Provider configurations
     providers:
         google:
@@ -158,6 +176,42 @@ unicode_subsets: []  # 48 files per font
 - All subsets `[]`: **48 files** per font
 
 **Note:** Only affects Google Fonts, Bunny Fonts, and Fontsource. Local fonts are not filtered.
+
+---
+
+## Build & Export Settings
+
+Font Manager supports multi-format export for seamless framework integration.
+
+### `build.tool`
+
+**Type:** `string`  
+**Default:** `auto`  
+**Values:** `auto`, `assetmapper`, `webpack`, `vite`
+
+```yaml
+font_manager:
+    build:
+        tool: 'auto'  # Auto-detect build tool
+```
+
+### `export.formats`
+
+**Type:** `array<string>`  
+**Default:** `['css_variables']`
+
+Export formats to generate when locking fonts.
+
+```yaml
+font_manager:
+    export:
+        formats:
+            - css_variables
+            - scss_bootstrap
+            - tailwind_config
+```
+
+**For detailed format documentation, see [Export Formats Guide](exports.md).**
 
 ---
 

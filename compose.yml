@@ -4,7 +4,7 @@ services:
       context: "./docker/php"
       args:
         PHP_VERSION: ${PHP_VERSION:-8.2}
-    container_name: google-fonts-php
+    container_name: font-manager-php
     volumes:
       - .:/app
     environment:

@@ -283,6 +283,7 @@ cat config/packages/font_manager.yaml
 ---
 
 For more details, see:
+- [Export Formats](exports.md)
 - [Providers Guide](providers.md)
 - [Commands Reference](commands.md)
 - [Configuration Options](configuration.md)

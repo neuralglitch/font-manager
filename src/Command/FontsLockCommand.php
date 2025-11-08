@@ -4,13 +4,20 @@ declare(strict_types=1);
 
 namespace NeuralGlitch\FontManager\Command;
 
+use NeuralGlitch\FontManager\Enum\BuildToolType;
+use NeuralGlitch\FontManager\Model\Font;
+use NeuralGlitch\FontManager\Model\FontCollection;
+use NeuralGlitch\FontManager\Service\BuildToolDetector;
+use NeuralGlitch\FontManager\Service\ExporterOrchestrator;
 use NeuralGlitch\FontManager\Service\FontLockManager;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 #[AsCommand(
     name: 'fonts:lock',
@@ -20,6 +27,9 @@ final class FontsLockCommand extends Command
 {
     public function __construct(
         private readonly FontLockManager $lockManager,
+        private readonly ExporterOrchestrator $orchestrator,
+        private readonly BuildToolDetector $buildToolDetector,
+        private readonly ParameterBagInterface $params,
         private readonly string $projectDir
     ) {
         parent::__construct();
@@ -34,6 +44,7 @@ final class FontsLockCommand extends Command
                 'Template directories to scan',
                 []
             )
+            ->addOption('no-export', null, InputOption::VALUE_NONE, 'Skip automatic export after locking')
             ->setHelp(
                 'The <info>%command.name%</info> command scans Twig templates for font_manager() function calls, ' .
                 'downloads all referenced fonts, and creates a manifest file for production use.' . "\n\n" .
@@ -102,6 +113,81 @@ final class FontsLockCommand extends Command
 
         $io->success(sprintf('Successfully locked %d fonts to %s', count($fonts), $this->lockManager->getManifestFile()));
 
+        // Auto-export if configured and not disabled
+        if (!$input->getOption('no-export') && $this->shouldAutoExport()) {
+            $io->section('Exporting fonts');
+
+            $manifest = $this->lockManager->loadManifest();
+            $manifestFonts = $manifest['fonts'] ?? [];
+            if (!is_array($manifestFonts)) {
+                $manifestFonts = [];
+            }
+            $fontCollection = $this->buildFontCollection($manifestFonts);
+
+            // Detect build tool
+            $buildToolConfig = $this->params->get('font_manager.build.tool');
+            $buildTool = match ($buildToolConfig) {
+                'auto' => $this->buildToolDetector->detect($this->projectDir),
+                'assetmapper' => BuildToolType::ASSET_MAPPER,
+                'webpack' => BuildToolType::WEBPACK,
+                'vite' => BuildToolType::VITE,
+                default => BuildToolType::UNKNOWN,
+            };
+
+            // Get configured export formats
+            $formats = $this->params->get('font_manager.export.formats');
+
+            if (is_array($formats) && [] !== $formats) {
+                $io->comment(sprintf('Detected build tool: %s', $this->buildToolDetector->getName($buildTool)));
+                $io->comment(sprintf('Exporting %d format(s): %s', count($formats), implode(', ', $formats)));
+
+                $results = $this->orchestrator->export(
+                    $fontCollection,
+                    $formats,
+                    $this->projectDir,
+                    $buildTool,
+                    true
+                );
+
+                $io->success(sprintf('Exported %d file(s)', count($results)));
+            }
+        }
+
         return Command::SUCCESS;
+    }
+
+    private function shouldAutoExport(): bool
+    {
+        $formats = $this->params->get('font_manager.export.formats');
+
+        return is_array($formats) && [] !== $formats;
+    }
+
+    /**
+     * @param array<string, mixed> $manifestFonts
+     */
+    private function buildFontCollection(array $manifestFonts): FontCollection
+    {
+        $collection = new FontCollection();
+
+        foreach ($manifestFonts as $name => $fontData) {
+            if (!is_array($fontData)) {
+                continue;
+            }
+
+            $fontName = $fontData['name'] ?? $name;
+            $font = new Font(
+                name: is_string($fontName) ? $fontName : 'Unknown',
+                weights: is_array($fontData['weights'] ?? null) ? array_map('intval', $fontData['weights']) : [400],
+                styles: is_array($fontData['styles'] ?? null) ? array_map('strval', $fontData['styles']) : ['normal'],
+                monospace: is_bool($fontData['monospace'] ?? null) ? $fontData['monospace'] : false,
+                semantic: is_string($fontData['semantic'] ?? null) ? $fontData['semantic'] : null,
+                files: is_array($fontData['files'] ?? null) ? $fontData['files'] : []
+            );
+
+            $collection->add($font);
+        }
+
+        return $collection;
     }
 }

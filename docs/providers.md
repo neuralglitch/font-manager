@@ -245,7 +245,8 @@ font_manager:
 ---
 
 For more information:
-- [Providers Guide](providers.md)
+- [Export Formats](exports.md)
+- [Usage Guide](usage.md)
 - [Commands Reference](commands.md)
 - [Configuration](configuration.md)
 
