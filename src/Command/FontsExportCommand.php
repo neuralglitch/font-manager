@@ -11,6 +11,7 @@ use NeuralGlitch\FontManager\Model\FontCollection;
 use NeuralGlitch\FontManager\Service\BuildToolDetector;
 use NeuralGlitch\FontManager\Service\ExporterOrchestrator;
 use NeuralGlitch\FontManager\Service\FontLockManager;
+use NeuralGlitch\FontManager\Service\FormatAutoDetector;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -29,6 +30,7 @@ final class FontsExportCommand extends Command
         private readonly ExporterOrchestrator $orchestrator,
         private readonly FontLockManager $lockManager,
         private readonly BuildToolDetector $buildToolDetector,
+        private readonly FormatAutoDetector $formatAutoDetector,
         private readonly string $projectDir
     ) {
         parent::__construct();
@@ -78,8 +80,15 @@ final class FontsExportCommand extends Command
         $formatsOption = $input->getOption('format');
         $formats = is_array($formatsOption) ? $formatsOption : [];
         if ([] === $formats) {
-            // Use all available formats
-            $formats = $this->exporterRegistry->getNames();
+            // Try auto-detection
+            $autoDetected = $this->formatAutoDetector->detect($this->projectDir);
+            if ([] !== $autoDetected) {
+                $formats = $autoDetected;
+                $io->comment(sprintf('Auto-detected formats: %s', implode(', ', $formats)));
+            } else {
+                // Fallback: Use all available formats
+                $formats = $this->exporterRegistry->getNames();
+            }
         }
 
         $io->info(sprintf('Exporting %d format(s)', count($formats)));

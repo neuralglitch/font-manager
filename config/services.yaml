@@ -65,6 +65,7 @@ services:
     NeuralGlitch\FontManager\Command\FontsLockCommand:
         arguments:
             $projectDir: '%kernel.project_dir%'
+            $formatAutoDetector: '@NeuralGlitch\FontManager\Service\FormatAutoDetector'
             $params: '@parameter_bag'
         tags: ['console.command']
 
@@ -132,6 +133,8 @@ services:
     # Build Tool Detection & Orchestration
     NeuralGlitch\FontManager\Service\BuildToolDetector: ~
 
+    NeuralGlitch\FontManager\Service\FormatAutoDetector: ~
+
     NeuralGlitch\FontManager\Service\ExporterOrchestrator:
         arguments:
             $registry: '@NeuralGlitch\FontManager\Exporter\ExporterRegistry'
@@ -141,6 +144,7 @@ services:
     NeuralGlitch\FontManager\Command\FontsExportCommand:
         arguments:
             $projectDir: '%kernel.project_dir%'
+            $formatAutoDetector: '@NeuralGlitch\FontManager\Service\FormatAutoDetector'
         tags: ['console.command']
 
     NeuralGlitch\FontManager\Command\FontsFormatsCommand:

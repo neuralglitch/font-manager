@@ -6,12 +6,19 @@ Font Manager can export fonts in 12+ formats for seamless integration with any C
 
 ### 1. Configure Export Formats
 
+**Option A: Auto-Detection (Recommended)**
+
 ```yaml
 # config/packages/font_manager.yaml
 font_manager:
-    build:
-        tool: 'auto'  # auto-detect: assetmapper, webpack, or vite
-    
+    export:
+        auto_detect: true  # Scans project for Bootstrap, Tailwind, TypeScript
+```
+
+**Option B: Manual Configuration**
+
+```yaml
+font_manager:
     export:
         formats:
             - css_variables      # CSS custom properties

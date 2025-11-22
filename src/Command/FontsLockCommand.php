@@ -10,6 +10,7 @@ use NeuralGlitch\FontManager\Model\FontCollection;
 use NeuralGlitch\FontManager\Service\BuildToolDetector;
 use NeuralGlitch\FontManager\Service\ExporterOrchestrator;
 use NeuralGlitch\FontManager\Service\FontLockManager;
+use NeuralGlitch\FontManager\Service\FormatAutoDetector;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -29,6 +30,7 @@ final class FontsLockCommand extends Command
         private readonly FontLockManager $lockManager,
         private readonly ExporterOrchestrator $orchestrator,
         private readonly BuildToolDetector $buildToolDetector,
+        private readonly FormatAutoDetector $formatAutoDetector,
         private readonly ParameterBagInterface $params,
         private readonly string $projectDir
     ) {
@@ -136,6 +138,13 @@ final class FontsLockCommand extends Command
 
             // Get configured export formats
             $formats = $this->params->get('font_manager.export.formats');
+            $autoDetect = $this->params->get('font_manager.export.auto_detect');
+
+            // Use auto-detection if enabled
+            if (true === $autoDetect) {
+                $formats = $this->formatAutoDetector->detect($this->projectDir);
+                $io->comment(sprintf('Auto-detected formats: %s', implode(', ', $formats)));
+            }
 
             if (is_array($formats) && [] !== $formats) {
                 $io->comment(sprintf('Detected build tool: %s', $this->buildToolDetector->getName($buildTool)));

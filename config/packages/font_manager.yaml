@@ -17,6 +17,28 @@ font_manager:
     # Font lock manifest file
     manifest_file: '%kernel.project_dir%/var/font-manager.lock.json'
 
+    # Build tool configuration
+    build:
+        tool: 'auto'  # auto-detect: assetmapper, webpack, or vite
+
+    # Export formats (generated when locking fonts)
+    export:
+        formats:
+            - css_variables  # CSS custom properties (default)
+            # Uncomment formats you need:
+            # - scss_bootstrap     # Bootstrap SCSS variables
+            # - tailwind_config    # Tailwind CSS configuration
+            # - typescript_definitions  # TypeScript type definitions
+            # - esm_javascript     # ES Modules
+            # - scss_variables     # SCSS variables
+            # - scss_mixins        # SCSS mixins & functions
+            # - css_modules        # CSS Modules export
+            # - css_layer          # CSS @layer integration
+            # - json               # Generic JSON
+            # - design_tokens      # W3C Design Tokens
+            # - figma_tokens       # Figma Tokens Studio
+            # - style_dictionary   # Style Dictionary format
+
     # Provider configurations
     providers:
         google:
@@ -37,4 +59,5 @@ font_manager:
 # Production configuration
 when@prod:
     font_manager:
+        # Use locked/local fonts instead of CDN in production
         use_locked_fonts: true

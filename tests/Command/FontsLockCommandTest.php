@@ -12,6 +12,7 @@ use NeuralGlitch\FontManager\Service\BuildToolDetector;
 use NeuralGlitch\FontManager\Service\ExporterOrchestrator;
 use NeuralGlitch\FontManager\Service\FontDownloader;
 use NeuralGlitch\FontManager\Service\FontLockManager;
+use NeuralGlitch\FontManager\Service\FormatAutoDetector;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
@@ -52,9 +53,13 @@ final class FontsLockCommandTest extends TestCase
         $exporterRegistry = new ExporterRegistry();
         $orchestrator = new ExporterOrchestrator($exporterRegistry, $this->filesystem);
         $buildToolDetector = new BuildToolDetector($this->filesystem);
-        $params = new ParameterBag(['font_manager.export.formats' => []]);
+        $formatAutoDetector = new FormatAutoDetector($this->filesystem);
+        $params = new ParameterBag([
+            'font_manager.export.formats' => [],
+            'font_manager.export.auto_detect' => false,
+        ]);
 
-        $command = new FontsLockCommand($lockManager, $orchestrator, $buildToolDetector, $params, $this->tempDir);
+        $command = new FontsLockCommand($lockManager, $orchestrator, $buildToolDetector, $formatAutoDetector, $params, $this->tempDir);
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);
 
@@ -90,9 +95,13 @@ final class FontsLockCommandTest extends TestCase
         $exporterRegistry = new ExporterRegistry();
         $orchestrator = new ExporterOrchestrator($exporterRegistry, $this->filesystem);
         $buildToolDetector = new BuildToolDetector($this->filesystem);
-        $params = new ParameterBag(['font_manager.export.formats' => []]);
+        $formatAutoDetector = new FormatAutoDetector($this->filesystem);
+        $params = new ParameterBag([
+            'font_manager.export.formats' => [],
+            'font_manager.export.auto_detect' => false,
+        ]);
 
-        $command = new FontsLockCommand($lockManager, $orchestrator, $buildToolDetector, $params, $this->tempDir);
+        $command = new FontsLockCommand($lockManager, $orchestrator, $buildToolDetector, $formatAutoDetector, $params, $this->tempDir);
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);
 

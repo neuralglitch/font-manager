@@ -225,35 +225,6 @@ function applyFont(element: HTMLElement, family: FontFamily) {
 - Symfony 6.4, 7.x, or 8.x
 - Twig 3.0 or higher
 
-## Development
-
-### Quality Assurance Tools
-
-```bash
-# Quick QA check
-make qa          # CS + PHPStan + Psalm + Tests
-
-# Full QA suite
-make qa-full     # QA + Mutation Testing + Metrics
-
-# Individual tools
-make phpstan     # Static analysis (PHPStan level max)
-make psalm       # Static analysis (Psalm level 4)
-make infection   # Mutation testing (MSI ≥40%)
-make metrics     # Code quality metrics
-make rector      # Automated refactoring checks
-```
-
-### Dependency Management
-
-This package uses [Renovate](https://docs.renovatebot.com/) for automated dependency updates:
-- Weekly updates (Mondays before 6am)
-- Security updates at any time
-- Grouped updates for Symfony packages and QA tools
-- Auto-merge for minor GitHub Actions updates
-
-For more details, see [CONTRIBUTING.md](CONTRIBUTING.md).
-
 ## Support
 
 - [GitHub Issues](https://github.com/neuralglitch/font-manager/issues)
