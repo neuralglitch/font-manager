@@ -12,9 +12,17 @@
 
 </div>
 
-> **Abandoned and archived.** `neuralglitch/font-manager` is **abandoned** on [Packagist](https://packagist.org/packages/neuralglitch/font-manager) (replacement: [`symfinity/font-manager`](https://packagist.org/packages/symfinity/font-manager)). This [GitHub repository](https://github.com/neuralglitch/font-manager) is **read-only / archived**. New installs, issues, and releases: **[symfinity/font-manager](https://github.com/symfinity/font-manager)** (source of truth: [symfinity/symfinity](https://github.com/symfinity/symfinity) `packages/font-manager/`).
+> [!WARNING]
 >
-> **Migration:** [docs/migration.md](docs/migration.md) — Composer, namespace, Flex recipe, and bundle class changes. From `neuralglitch/google-fonts`: [docs/migration-from-google-fonts.md](docs/migration-from-google-fonts.md).
+> `neuralglitch/font-manager` is
+>
+> - **abandoned** on [Packagist](https://packagist.org/packages/neuralglitch/font-manager)
+> - **read-only / archived** on [GitHub](https://github.com/neuralglitch/font-manager)
+>
+> Replacement: `symfinity/font-manager`
+>
+> - New installs, issues, and releases: [symfinity/font-manager](https://github.com/symfinity/font-manager)
+> - Migration: [docs/migration.md](docs/migration.md)
 
 ## Features
 
