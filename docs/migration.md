@@ -1,277 +1,68 @@
-# Migration from google-fonts Bundle
-
-If you're migrating from `neuralglitch/google-fonts`, this guide will help you transition smoothly.
-
-## Automatic Migration (Recommended)
-
-The easiest way to migrate is using the built-in migration command:
-
-```bash
-# Preview changes
-php bin/console fonts:migrate-from-google-fonts --dry-run
-
-# Apply migration
-php bin/console fonts:migrate-from-google-fonts
-```
-
-**What it does:**
-
-✅ Converts `google_fonts.yaml` → `font_manager.yaml`  
-✅ Updates all templates: `google_fonts()` → `font_manager()`  
-✅ Migrates manifest: `google-fonts.lock.json` → `font-manager.lock.json`  
-✅ Creates backups automatically  
-✅ Shows summary of all changes
+# Migration from neuralglitch/font-manager
 
-**Options:**
-```bash
-# Dry run (preview only)
-php bin/console fonts:migrate-from-google-fonts --dry-run
+**`neuralglitch/font-manager` is abandoned** on Packagist (replacement: **`symfinity/font-manager`**). This repository is **archived** on GitHub — use [symfinity/font-manager](https://github.com/symfinity/font-manager) for issues, releases, and documentation.
 
-# Skip template migration
-php bin/console fonts:migrate-from-google-fonts --skip-templates
-
-# Skip config migration
-php bin/console fonts:migrate-from-google-fonts --skip-config
-```
-
-After migration, test your application and then:
-```bash
-composer remove neuralglitch/google-fonts
-```
-
-## Manual Migration
-
-If you prefer manual migration or need more control:
-
-### 1. Update Composer
-
-```bash
-composer remove neuralglitch/google-fonts
-composer require neuralglitch/font-manager
-```
-
-### 2. Update Configuration
-
-**Before:**
-```yaml
-# config/packages/google_fonts.yaml
-google_fonts:
-    lock_fonts: false
-    fonts_dir: '%kernel.project_dir%/assets/fonts'
-    manifest_path: '%kernel.project_dir%/var/google-fonts.lock.json'
-    use_locked_fonts: false
-```
+## Package identity
 
-**After:**
-```yaml
-# config/packages/font_manager.yaml
-font_manager:
-    default_provider: 'google'  # Keep using Google Fonts
-    lock_fonts: false
-    fonts_dir: '%kernel.project_dir%/assets/fonts'
-    manifest_path: '%kernel.project_dir%/var/font-manager.lock.json'
-    use_locked_fonts: false
-```
+| Item | Legacy (`neuralglitch/*`) | Symfinity (`symfinity/*`) |
+|------|---------------------------|---------------------------|
+| Composer name | `neuralglitch/font-manager` | `symfinity/font-manager` |
+| GitHub | [neuralglitch/font-manager](https://github.com/neuralglitch/font-manager) (archived) | [symfinity/font-manager](https://github.com/symfinity/font-manager) |
+| PSR-4 namespace | `NeuralGlitch\FontManager\` | `Symfinity\FontManager\` |
+| Test namespace | `NeuralGlitch\FontManager\Tests\` | `Symfinity\FontManager\Tests\` |
+| Bundle class | `NeuralGlitch\FontManager\FontManagerBundle` | `Symfinity\FontManager\FontManagerBundle` |
+| Config root key | `font_manager:` | `font_manager:` (unchanged) |
+| Config file | `config/packages/font_manager.yaml` | `config/packages/font_manager.yaml` |
 
-### 3. Update Templates
+## Composer and Symfony floor
 
-**Before:**
-```twig
-{{ google_fonts('Roboto', '400 700', 'normal') }}
-{{ google_fonts('Inter', '400 600', 'normal italic', 'swap', true) }}
-```
+| Constraint | Legacy (last release) | Symfinity |
+|------------|----------------------|-----------|
+| PHP | `>=8.1` | `>=8.2` |
+| Symfony | `^6.4 \|\| ^7.0 \|\| ^8.0` | `^7.4` (org consumer floor) |
 
-**After:**
-```twig
-{{ font_manager('Roboto', '400 700', 'normal') }}
-{{ font_manager('Inter', '400 600', 'normal italic', 'swap', true) }}
-```
+## Application changes
 
-### 4. Update Commands
+1. **Require** the successor and remove the legacy package:
 
-| google-fonts | font-manager |
-|--------------|--------------|
-| `gfonts:search` | `fonts:search --provider=google` |
-| `gfonts:import` | `fonts:search --provider=google` |
-| `gfonts:lock` | `fonts:lock` |
-| `gfonts:status` | `fonts:status` |
-| `gfonts:prune` | `fonts:prune` |
-| `gfonts:validate` | `fonts:validate` |
-| `gfonts:warmup-cache` | *(removed - automatic caching)* |
+   ```bash
+   composer remove neuralglitch/font-manager
+   composer require symfinity/font-manager
+   ```
 
-## Advantages of Migration
+2. **Flex recipes** — add the [symfinity/recipes](https://github.com/symfinity/recipes) endpoint to your project's `composer.json` (see [recipes README](https://github.com/symfinity/recipes/blob/main/README.md)). Legacy installs used [neuralglitch/symfony-recipes](https://github.com/neuralglitch/symfony-recipes).
 
-### 1. Multiple Provider Support
+3. **Update imports** in PHP and tests: `NeuralGlitch\FontManager` → `Symfinity\FontManager`.
 
-**google-fonts:**
-- Only Google Fonts
+4. **Update `config/bundles.php`** if the bundle is registered manually:
 
-**font-manager:**
-- Google Fonts
-- Bunny Fonts (GDPR-compliant)
-- Fontsource (version-controlled)
-- Local Fonts (custom fonts)
+   ```php
+   // Before
+   NeuralGlitch\FontManager\FontManagerBundle::class => ['all' => true],
 
-### 2. Better Privacy
+   // After
+   Symfinity\FontManager\FontManagerBundle::class => ['all' => true],
+   ```
 
-Switch to Bunny Fonts for GDPR compliance:
+5. **Twig** — `font_manager()` is unchanged.
 
-```yaml
-font_manager:
-    default_provider: 'bunny'  # Same fonts, zero tracking
-```
+6. **CLI** — command names unchanged (`fonts:lock`, `fonts:search`, `fonts:status`, `fonts:prune`, …).
 
-### 3. Custom Fonts
+7. **Locked fonts** — if needed, re-lock after migration:
 
-```yaml
-font_manager:
-    providers:
-        local:
-            enabled: true
-            fonts:
-                BrandFont:
-                    weights: [400, 700]
-                    files:
-                        400-normal: 'brand-regular.woff2'
-```
+   ```bash
+   php bin/console fonts:lock
+   ```
 
-### 4. Per-Font Provider Selection
+## Migrating from google-fonts instead?
 
-```twig
-{# Use different providers per font #}
-{{ font_manager('Roboto', '400', 'normal', 'swap', false, 'bunny') }}
-{{ font_manager('BrandFont', '400 700', 'normal', 'swap', false, 'local') }}
-```
+If you still use **`neuralglitch/google-fonts`**, see [Migration from neuralglitch/google-fonts](migration-from-google-fonts.md).
 
-## Breaking Changes
+## Successor documentation
 
-### Twig Function Name
+Full handbook for `symfinity/font-manager`:
 
-- **OLD:** `google_fonts()`
-- **NEW:** `font_manager()`
-
-### Command Prefix
-
-- **OLD:** `gfonts:`
-- **NEW:** `fonts:`
-
-### Configuration File
-
-- **OLD:** `config/packages/google_fonts.yaml`
-- **NEW:** `config/packages/font_manager.yaml`
-
-### Manifest File
-
-- **OLD:** `var/google-fonts.lock.json`
-- **NEW:** `var/font-manager.lock.json`
-
-## Step-by-Step Migration
-
-### Step 1: Install font-manager
-
-```bash
-composer require neuralglitch/font-manager
-```
-
-Keep google-fonts installed temporarily.
-
-### Step 2: Create New Configuration
-
-```bash
-cp config/packages/google_fonts.yaml config/packages/font_manager.yaml
-```
-
-Edit the new file to use `font_manager:` root key.
-
-### Step 3: Update Templates Gradually
-
-Update one template at a time:
-
-```twig
-{# OLD #}
-{{ google_fonts('Roboto', '400 700') }}
-
-{# NEW #}
-{{ font_manager('Roboto', '400 700', 'normal', 'swap', false, 'google') }}
-```
-
-Test each template to ensure fonts load correctly.
-
-### Step 4: Update CI/CD
-
-If you run `gfonts:lock` in your deployment:
-
-```bash
-# OLD
-php bin/console gfonts:lock
-
-# NEW
-php bin/console fonts:lock
-```
-
-### Step 5: Remove google-fonts
-
-Once all templates are updated and tested:
-
-```bash
-composer remove neuralglitch/google-fonts
-rm config/packages/google_fonts.yaml
-```
-
-## Troubleshooting
-
-### Fonts not loading after migration
-
-**Check configuration:**
-```bash
-php bin/console debug:config font_manager
-```
-
-**Check provider:**
-```yaml
-font_manager:
-    default_provider: 'google'  # Explicitly set to google
-```
-
-### Search command not working
-
-The search command requires explicit provider:
-
-```bash
-# Won't work:
-php bin/console fonts:search roboto
-
-# Will work:
-php bin/console fonts:search roboto --provider=google
-```
-
-Or set Google as default provider in config.
-
-### Locked fonts from old bundle
-
-Delete old manifest and re-lock:
-
-```bash
-rm var/google-fonts.lock.json
-php bin/console fonts:lock
-```
-
-## Recommended: Switch to Bunny Fonts
-
-After migration, consider switching to Bunny Fonts for better privacy:
-
-```yaml
-# config/packages/font_manager.yaml
-font_manager:
-    default_provider: 'bunny'  # Same fonts, better privacy
-```
-
-Templates automatically work - no changes needed!
-
-## Need Help?
-
-- [Full Documentation](../README.md#documentation)
-- [Export Formats](exports.md)
-- [GitHub Issues](https://github.com/neuralglitch/font-manager/issues)
-- [Provider Guide](providers.md)
-
+- [Quickstart](https://github.com/symfinity/font-manager/blob/main/docs/quickstart.md)
+- [Installation](https://github.com/symfinity/font-manager/blob/main/docs/installation.md)
+- [Configuration](https://github.com/symfinity/font-manager/blob/main/docs/configuration.md)
+- [Export formats](https://github.com/symfinity/font-manager/blob/main/docs/exports.md)
